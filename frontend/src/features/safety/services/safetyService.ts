@@ -72,3 +72,7 @@ export async function sendEmergencySosCall(): Promise<{
   }
 }
 
+export const toggleSafetyFeature = updateFeatureToggle;
+export const addTrustedContact = createTrustedContact;
+export const triggerEmergencySos = sendEmergencySosCall;
+

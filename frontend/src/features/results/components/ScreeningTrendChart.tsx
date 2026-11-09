@@ -27,7 +27,7 @@ export default function ScreeningTrendChart({ points, protocolLabel }: Props) {
           {/* Subtle gradient fill background under curve */}
           <div className="absolute inset-x-2 bottom-4 h-28 bg-gradient-to-t from-teal-50/80 via-teal-50/30 to-transparent rounded-2xl pointer-events-none" />
 
-          {points.map((pt, idx) => {
+          {points.map(pt => {
             // calculate relative height for visual alignment (24 -> 40%, 28 -> 85%)
             const heightPercent = 35 + (pt.score - 24) * 12;
 

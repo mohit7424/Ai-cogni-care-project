@@ -1,14 +1,15 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import type { ResultsTrendsData } from '../types/results.types';
 import {
   getResultsAndTrendsData,
   downloadClinicalSummaryPdf,
 } from '../services/resultsService';
+import { mockResultsData } from '../data/results.data';
 
 interface UseResultsReturn {
-  data: ResultsTrendsData | null;
+  data: ResultsTrendsData;
   isLoading: boolean;
   timeframe: string;
   setTimeframe: (t: string) => void;
@@ -17,11 +18,11 @@ interface UseResultsReturn {
 }
 
 export function useResults(): UseResultsReturn {
-  const [data, setData] = useState<ResultsTrendsData | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [data, setData] = useState<ResultsTrendsData>(mockResultsData);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [timeframe, setTimeframe] = useState<string>('Last 6 Months');
 
-  const fetchData = useCallback(async () => {
+  const refetch = useCallback(async () => {
     setIsLoading(true);
     try {
       const res = await getResultsAndTrendsData();
@@ -30,10 +31,6 @@ export function useResults(): UseResultsReturn {
       setIsLoading(false);
     }
   }, []);
-
-  useEffect(() => {
-    void fetchData();
-  }, [fetchData]);
 
   const handleDownloadPdf = useCallback(async () => {
     try {
@@ -50,7 +47,6 @@ export function useResults(): UseResultsReturn {
     timeframe,
     setTimeframe,
     handleDownloadPdf,
-    refetch: fetchData,
+    refetch,
   };
 }
-

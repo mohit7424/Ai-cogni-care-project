@@ -8,7 +8,7 @@ import CognitiveDomainBreakdown from '../components/CognitiveDomainBreakdown';
 import { useResults } from '../hooks/useResults';
 
 export default function ResultsScreen() {
-  const { data, timeframe, setTimeframe, handleDownloadPdf } = useResults();
+  const { data, timeframe, handleDownloadPdf } = useResults();
 
   if (!data) return null;
 

@@ -39,8 +39,8 @@ export default function ScreeningScreen() {
     selectAnswer,
     selectedMemoryItems,
     toggleMemoryItem,
-    nextQuestion,
-    previousQuestion,
+    nextStep,
+    prevStep,
     resetScreening,
     submitAnswers,
     resultsData,
@@ -48,7 +48,7 @@ export default function ScreeningScreen() {
 
   const v2StepsList: { id: V2ScreeningStep; label: string }[] = [
     { id: 'attention', label: '1. Attention & Focus' },
-    { id: 'memory', label: '2. Memory Recall' },
+    { id: 'memory-recall', label: '2. Memory Recall' },
     { id: 'review', label: '3. Review Answers' },
     { id: 'processing', label: '4. Processing' },
     { id: 'results', label: '5. Results (86%)' },
@@ -163,15 +163,15 @@ export default function ScreeningScreen() {
               currentIndex={questionIndex}
               selectedOption={selectedAnswers[questionIndex]}
               onSelectOption={selectAnswer}
-              onNext={nextQuestion}
-              onPrevious={previousQuestion}
+              onNext={nextStep}
+              onPrevious={prevStep}
               onBackToOverview={() => router.push('/dashboard')}
               timer={data.initialTimer}
             />
           )}
 
           {/* VIEW 2: Memory Recall (Apple, Car, Chair, Tree, Football, Book) */}
-          {currentStep === 'memory' && (
+          {currentStep === 'memory-recall' && (
             <V2MemoryRecall
               items={data.memoryRecall.items}
               instruction={data.memoryRecall.instruction}
@@ -188,10 +188,10 @@ export default function ScreeningScreen() {
             <V2ReviewAnswers
               sections={data.review.sections}
               totalTimeFormatted={data.review.totalTimeFormatted}
-              onBack={() => setCurrentStep('memory')}
+              onBack={() => setCurrentStep('memory-recall')}
               onEditSection={sectionId => {
                 if (sectionId === 'sec-3') {
-                  setCurrentStep('memory');
+                  setCurrentStep('memory-recall');
                 } else {
                   setQuestionIndex(0);
                   setCurrentStep('attention');

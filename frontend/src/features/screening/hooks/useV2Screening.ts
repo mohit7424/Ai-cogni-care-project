@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import type {
   V2ScreeningData,
   V2ScreeningResultData,
@@ -13,7 +13,7 @@ import { mockV2ScreeningData } from '../data/screening.data';
 
 export type V2ScreeningStep =
   | 'attention'
-  | 'memory'
+  | 'memory-recall'
   | 'review'
   | 'processing'
   | 'results'
@@ -22,7 +22,6 @@ export type V2ScreeningStep =
 export function useV2Screening() {
   // Initialize synchronously with mock data so there is never a blank screen / null render
   const [data, setData] = useState<V2ScreeningData>(mockV2ScreeningData);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<V2ScreeningStep>('attention');
   const [questionIndex, setQuestionIndex] = useState<number>(0);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, string>>({
@@ -37,7 +36,7 @@ export function useV2Screening() {
     mockV2ScreeningData.results
   );
 
-  const loadData = useCallback(async () => {
+  const refetch = useCallback(async () => {
     try {
       const res = await getV2ScreeningData();
       if (res && res.questions && res.questions.length > 0) {
@@ -51,75 +50,80 @@ export function useV2Screening() {
     }
   }, []);
 
-  useEffect(() => {
-    void loadData();
-  }, [loadData]);
-
   const selectAnswer = useCallback((opt: string) => {
     setSelectedAnswers(prev => ({ ...prev, [questionIndex]: opt }));
   }, [questionIndex]);
 
-  const toggleMemoryItem = useCallback((id: string) => {
+  const toggleMemoryItem = useCallback((itemId: string) => {
     setSelectedMemoryItems(prev =>
-      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+      prev.includes(itemId)
+        ? prev.filter(id => id !== itemId)
+        : [...prev, itemId]
     );
   }, []);
 
-  const nextQuestion = useCallback(() => {
-    if (!data) return;
-    if (questionIndex < data.questions.length - 1) {
-      setQuestionIndex(prev => prev + 1);
-    } else {
-      setCurrentStep('memory');
+  const nextStep = useCallback(() => {
+    if (currentStep === 'attention') {
+      if (questionIndex < data.questions.length - 1) {
+        setQuestionIndex(i => i + 1);
+      } else {
+        setCurrentStep('memory-recall');
+      }
+    } else if (currentStep === 'memory-recall') {
+      setCurrentStep('review');
+    } else if (currentStep === 'review') {
+      setCurrentStep('processing');
+    } else if (currentStep === 'processing') {
+      setCurrentStep('results');
+    } else if (currentStep === 'results') {
+      setCurrentStep('history-trends');
     }
-  }, [data, questionIndex]);
+  }, [currentStep, questionIndex, data.questions.length]);
 
-  const previousQuestion = useCallback(() => {
-    if (questionIndex > 0) {
-      setQuestionIndex(prev => prev - 1);
+  const prevStep = useCallback(() => {
+    if (currentStep === 'attention' && questionIndex > 0) {
+      setQuestionIndex(i => i - 1);
+    } else if (currentStep === 'memory-recall') {
+      setCurrentStep('attention');
+    } else if (currentStep === 'review') {
+      setCurrentStep('memory-recall');
+    } else if (currentStep === 'results') {
+      setCurrentStep('review');
+    } else if (currentStep === 'history-trends') {
+      setCurrentStep('results');
     }
-  }, [questionIndex]);
-
-  const resetScreening = useCallback(() => {
-    setQuestionIndex(0);
-    setSelectedAnswers({ 0: '10' });
-    setSelectedMemoryItems(['m-1', 'm-2', 'm-4']);
-    setCurrentStep('attention');
-  }, []);
+  }, [currentStep, questionIndex]);
 
   const submitAnswers = useCallback(async () => {
     setCurrentStep('processing');
-    const answersMap: Record<string, string> = {};
-    Object.entries(selectedAnswers).forEach(([k, v]) => {
-      answersMap[`q-${k}`] = v;
-    });
-
-    try {
-      const res = await submitV2ScreeningAnswers(answersMap);
-      if (res && res.overallScore) {
-        setResultsData(res);
-      }
-    } catch {
-      // Service handles mock fallback
-    }
+    const res = await submitV2ScreeningAnswers(selectedAnswers);
+    setResultsData(res);
+    setCurrentStep('results');
   }, [selectedAnswers]);
+
+  const resetScreening = useCallback(() => {
+    setQuestionIndex(0);
+    setCurrentStep('attention');
+    setSelectedAnswers({ 0: '10' });
+    setSelectedMemoryItems(['m-1', 'm-2', 'm-4']);
+  }, []);
 
   return {
     data,
-    isLoading,
     currentStep,
     setCurrentStep,
     questionIndex,
     setQuestionIndex,
+    currentQuestion: data.questions[questionIndex],
     selectedAnswers,
-    selectAnswer,
     selectedMemoryItems,
+    resultsData,
+    selectAnswer,
     toggleMemoryItem,
-    nextQuestion,
-    previousQuestion,
-    resetScreening,
+    nextStep,
+    prevStep,
     submitAnswers,
-    resultsData: resultsData || data.results,
-    refetch: loadData,
+    resetScreening,
+    refetch,
   };
 }

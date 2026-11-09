@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import type {
   ScreeningOverview,
   ScreeningStep,
@@ -13,6 +13,10 @@ import {
   submitScreeningAnswers,
   startNewScreeningSession,
 } from '../services/screeningService';
+import {
+  mockScreeningOverview,
+  mockQuestions,
+} from '../data/screening.data';
 
 interface UseScreeningReturn {
   overviewData: ScreeningOverview | null;
@@ -34,16 +38,16 @@ interface UseScreeningReturn {
 }
 
 export function useScreening(): UseScreeningReturn {
-  const [overviewData, setOverviewData] = useState<ScreeningOverview | null>(null);
-  const [questions, setQuestions] = useState<ScreeningQuestion[]>([]);
+  const [overviewData, setOverviewData] = useState<ScreeningOverview | null>(mockScreeningOverview);
+  const [questions, setQuestions] = useState<ScreeningQuestion[]>(mockQuestions);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [finalResult, setFinalResult] = useState<FinalScreeningResult | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<ScreeningStep>('introduction');
 
-  const fetchInitialData = useCallback(async () => {
+  const refetch = useCallback(async () => {
     setIsLoading(true);
     try {
       const [overview, qList] = await Promise.all([
@@ -57,26 +61,24 @@ export function useScreening(): UseScreeningReturn {
     }
   }, []);
 
-  useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
-      void fetchInitialData();
-    }, 0);
-
-    return () => window.clearTimeout(timeoutId);
-  }, [fetchInitialData]);
-
   const handleStartScreening = useCallback(async () => {
     try {
       await startNewScreeningSession();
       setCurrentStep('questions');
       setCurrentQuestionIndex(0);
+      setAnswers({});
+      setFinalResult(null);
     } catch {
+      // Fallback local
       setCurrentStep('questions');
     }
   }, []);
 
   const handleAnswerSelect = useCallback((questionId: string, optionId: string) => {
-    setAnswers(prev => ({ ...prev, [questionId]: optionId }));
+    setAnswers(prev => ({
+      ...prev,
+      [questionId]: optionId,
+    }));
   }, []);
 
   const handleNextQuestion = useCallback(() => {
@@ -105,10 +107,10 @@ export function useScreening(): UseScreeningReturn {
   }, [answers]);
 
   const handleRestart = useCallback(() => {
-    setAnswers({});
-    setCurrentQuestionIndex(0);
-    setFinalResult(null);
     setCurrentStep('introduction');
+    setCurrentQuestionIndex(0);
+    setAnswers({});
+    setFinalResult(null);
   }, []);
 
   return {
@@ -127,6 +129,6 @@ export function useScreening(): UseScreeningReturn {
     handleStartScreening,
     handleSubmitTest,
     handleRestart,
-    refetch: fetchInitialData,
+    refetch,
   };
 }

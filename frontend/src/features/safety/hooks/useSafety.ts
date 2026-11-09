@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import type {
   SafetyPageData,
   TrustedContactItem,
@@ -9,9 +9,9 @@ import type {
 } from '../types/safety.types';
 import {
   getSafetyData,
-  updateFeatureToggle,
-  createTrustedContact,
-  sendEmergencySosCall,
+  toggleSafetyFeature,
+  addTrustedContact,
+  triggerEmergencySos,
 } from '../services/safetyService';
 import { mockSafetyData } from '../data/safety.data';
 
@@ -31,7 +31,7 @@ export function useSafety() {
   const [sosStatus, setSosStatus] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const fetchData = useCallback(async () => {
+  const refetch = useCallback(async () => {
     setIsLoading(true);
     try {
       const res = await getSafetyData();
@@ -45,40 +45,40 @@ export function useSafety() {
     }
   }, []);
 
-  useEffect(() => {
-    void fetchData();
-  }, [fetchData]);
-
   const handleToggleFeature = useCallback(
     async (featureId: SafetyFeatureKey) => {
+      const feature = features.find(item => item.id === featureId);
+      if (!feature) return;
+
+      const enabled = !feature.enabled;
       setFeatures(prev =>
-        prev.map(f => (f.id === featureId ? { ...f, enabled: !f.enabled } : f))
+        prev.map(f => (f.id === featureId ? { ...f, enabled } : f))
       );
-      const target = features.find(f => f.id === featureId);
-      if (target) {
-        await updateFeatureToggle(featureId, !target.enabled);
-      }
+      await toggleSafetyFeature(featureId, enabled);
     },
     [features]
   );
 
   const handleAddContact = useCallback(
-    async (newContact: Omit<TrustedContactItem, 'id'>) => {
-      const created = await createTrustedContact(newContact);
+    async (contact: Omit<TrustedContactItem, 'id'>) => {
+      const created = await addTrustedContact(contact);
       setContacts(prev => [...prev, created]);
-      setIsAddModalOpen(false);
     },
     []
   );
 
   const handleCallContact = useCallback((contact: TrustedContactItem) => {
     setCallingContact(contact);
+    alert(`Calling ${contact.name} at ${contact.phone}...`);
   }, []);
 
   const handleTriggerEmergency = useCallback(async () => {
     setIsSosModalOpen(true);
-    const res = await sendEmergencySosCall();
-    setSosStatus(res.message);
+    setSosStatus('Broadcasting high-priority SOS alert to caregivers and emergency services...');
+    const result = await triggerEmergencySos();
+    if (result.success) {
+      setSosStatus(`Alert dispatched at ${result.dispatchedAt}. Caregivers auto-dialed.`);
+    }
   }, []);
 
   const allActive = features.every(f => f.enabled);
@@ -93,14 +93,12 @@ export function useSafety() {
     isSosModalOpen,
     setIsSosModalOpen,
     callingContact,
-    setCallingContact,
     sosStatus,
+    isLoading,
     handleToggleFeature,
     handleAddContact,
     handleCallContact,
     handleTriggerEmergency,
-    isLoading,
-    refetch: fetchData,
+    refetch,
   };
 }
-

@@ -77,3 +77,5 @@ export const mockResultsData: ResultsTrendsData = {
   ],
 };
 
+export const mockResultsTrendsData = mockResultsData;
+
