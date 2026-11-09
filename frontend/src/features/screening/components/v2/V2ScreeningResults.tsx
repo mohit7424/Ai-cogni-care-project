@@ -1,19 +1,19 @@
 'use client';
 
 import React from 'react';
+import type { V2ScreeningResultData } from '../../types';
+import { mockV2ScreeningData } from '../../data/screening.data';
 
 interface Props {
+  resultsData?: V2ScreeningResultData;
   onViewDetailedReport: () => void;
 }
 
-export default function V2ScreeningResults({ onViewDetailedReport }: Props) {
-  const domains = [
-    { name: 'Memory', score: '90%', width: '90%' },
-    { name: 'Attention', score: '85%', width: '85%' },
-    { name: 'Language', score: '88%', width: '88%' },
-    { name: 'Executive Function', score: '86%', width: '86%' },
-    { name: 'Processing Speed', score: '82%', width: '82%' },
-  ];
+export default function V2ScreeningResults({
+  resultsData = mockV2ScreeningData.results,
+  onViewDetailedReport,
+}: Props) {
+  const { overallScore, performanceBadge, disclaimer, domains } = resultsData;
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
@@ -34,16 +34,16 @@ export default function V2ScreeningResults({ onViewDetailedReport }: Props) {
             {/* Score Ring & Badge */}
             <div className="flex items-center gap-6 py-2">
               <div className="w-28 h-28 rounded-full border-8 border-teal-100 border-t-[#0d9488] border-r-[#0d9488] flex flex-col items-center justify-center bg-white shadow-xs shrink-0">
-                <span className="text-3xl font-extrabold text-[#0d9488]">86%</span>
+                <span className="text-3xl font-extrabold text-[#0d9488]">{overallScore}%</span>
                 <span className="text-[9px] text-gray-400 font-bold uppercase tracking-wider">Overall Score</span>
               </div>
 
               <div className="space-y-2">
                 <span className="inline-block text-xs font-bold text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">
-                  ✓ Good Performance
+                  ✓ {performanceBadge}
                 </span>
                 <p className="text-xs text-gray-500 leading-relaxed max-w-xs">
-                  This is a screening result and not a diagnosis. For any concerns, please consult a healthcare professional.
+                  {disclaimer}
                 </p>
               </div>
             </div>
@@ -92,4 +92,3 @@ export default function V2ScreeningResults({ onViewDetailedReport }: Props) {
     </div>
   );
 }
-

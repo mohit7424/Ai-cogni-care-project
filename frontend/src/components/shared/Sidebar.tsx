@@ -186,8 +186,25 @@ export default function Sidebar({
         </nav>
       </div>
 
-      {/* User Mini Profile Badge (Bottom) */}
-      <div className="pt-4 border-t border-[#134941]/80 px-1">
+      {/* Support Message & User Mini Profile Badge (Bottom) */}
+      <div className="space-y-3 pt-3 border-t border-[#134941]/80 px-1">
+        {/* Supportive Health Card from Screenshot */}
+        <div className="p-3 rounded-xl bg-[#0d443c]/70 border border-[#14574d]/50 flex items-start gap-2.5">
+          <div className="w-6 h-6 rounded-lg bg-teal-500/20 text-teal-300 flex items-center justify-center shrink-0 mt-0.5">
+            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+            </svg>
+          </div>
+          <div>
+            <p className="text-[11px] font-semibold text-teal-100 leading-tight">
+              Your Cognitive Health Matters
+            </p>
+            <p className="text-[9.5px] text-teal-300/80 mt-0.5 leading-snug">
+              We&apos;re here to support you.
+            </p>
+          </div>
+        </div>
+
         <Link
           href="/dashboard/settings"
           className="flex items-center justify-between p-2.5 rounded-xl bg-[#0d443c]/70 hover:bg-[#0d443c] transition cursor-pointer"

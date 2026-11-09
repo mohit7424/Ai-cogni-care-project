@@ -3,16 +3,31 @@
 import React from 'react';
 
 interface Props {
-  onViewSession: (id: string) => void;
-  onViewTrends: () => void;
+  onViewSession?: (id: string) => void;
+  onViewTrends?: () => void;
+  onViewDetails?: () => void;
 }
 
-export default function Sub9ScreeningHistory({ onViewSession, onViewTrends }: Props) {
+export default function Sub9ScreeningHistory({
+  onViewSession,
+  onViewTrends,
+  onViewDetails,
+}: Props) {
   const sessions = [
     { id: '1', date: '05 Nov 2026', score: '78%', status: 'Normal', statusBg: 'bg-emerald-50 text-emerald-700' },
     { id: '2', date: '10 Aug 2026', score: '72%', status: 'Normal', statusBg: 'bg-emerald-50 text-emerald-700' },
     { id: '3', date: '15 May 2026', score: '68%', status: 'Watch', statusBg: 'bg-amber-50 text-amber-700' },
   ];
+
+  function handleAction(sessionId?: string) {
+    if (sessionId && onViewSession) {
+      onViewSession(sessionId);
+    } else if (onViewTrends) {
+      onViewTrends();
+    } else if (onViewDetails) {
+      onViewDetails();
+    }
+  }
 
   return (
     <div className="bg-white rounded-3xl border border-teal-100/80 p-8 shadow-xs max-w-4xl mx-auto space-y-6">
@@ -30,7 +45,7 @@ export default function Sub9ScreeningHistory({ onViewSession, onViewTrends }: Pr
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={onViewTrends}
+            onClick={() => handleAction()}
             className="text-xs font-bold text-[#0d9488] bg-teal-50 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition cursor-pointer"
           >
             View Trends Chart &rarr;
@@ -55,7 +70,7 @@ export default function Sub9ScreeningHistory({ onViewSession, onViewTrends }: Pr
           </thead>
           <tbody className="divide-y divide-gray-50">
             {sessions.map(s => (
-              <tr key={s.id} className="hover:bg-gray-50/60 transition">
+              <tr key={s.id} className="hover:bg-teal-50/30 transition">
                 <td className="py-3.5 px-4 font-semibold text-gray-800">{s.date}</td>
                 <td className="py-3.5 px-4 font-bold text-teal-800">{s.score}</td>
                 <td className="py-3.5 px-4">
@@ -66,7 +81,7 @@ export default function Sub9ScreeningHistory({ onViewSession, onViewTrends }: Pr
                 <td className="py-3.5 px-4 text-right">
                   <button
                     type="button"
-                    onClick={() => onViewSession(s.id)}
+                    onClick={() => handleAction(s.id)}
                     className="py-1 px-3 bg-white border border-gray-200 hover:border-teal-300 text-gray-700 text-xs font-semibold rounded-lg shadow-2xs transition cursor-pointer"
                   >
                     View
@@ -80,4 +95,3 @@ export default function Sub9ScreeningHistory({ onViewSession, onViewTrends }: Pr
     </div>
   );
 }
-

@@ -4,9 +4,10 @@ import React from 'react';
 
 interface Props {
   onBegin: () => void;
+  onBack?: () => void;
 }
 
-export default function Sub3Introduction({ onBegin }: Props) {
+export default function Sub3Introduction({ onBegin, onBack }: Props) {
   return (
     <div className="bg-white rounded-3xl border border-teal-100/80 p-8 shadow-xs max-w-2xl mx-auto text-center space-y-6">
       {/* 4-Step Mini Flow Pills */}
@@ -35,26 +36,36 @@ export default function Sub3Introduction({ onBegin }: Props) {
         </div>
       </div>
 
-      <div className="space-y-2 max-w-md mx-auto">
-        <h2 className="text-2xl font-bold text-gray-900">
+      {/* Headings */}
+      <div className="space-y-1.5 max-w-sm mx-auto">
+        <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
           Cognitive Screening
         </h2>
         <p className="text-xs text-gray-500 leading-relaxed">
-          Answer a set of simple questions to assess your memory, attention, and more.
+          Answer a set of simple questions to assess your memory, attention and more.
         </p>
       </div>
 
-      {/* Time Badge */}
-      <div className="inline-block bg-[#f0faf7] border border-teal-200 text-[#0d9488] font-semibold text-xs px-4 py-1.5 rounded-full">
-        Estimated Time: 5–10 Minutes
+      {/* Pill Badge */}
+      <div className="inline-block bg-[#eaf7f4] text-[#0d9488] font-bold text-xs px-4 py-1.5 rounded-full border border-teal-100/80">
+        Estimated Time: 8-10 Minutes
       </div>
 
-      {/* CTA Button */}
-      <div className="pt-2">
+      {/* Button Row */}
+      <div className="pt-2 flex items-center justify-center gap-3">
+        {onBack && (
+          <button
+            type="button"
+            onClick={onBack}
+            className="py-3 px-6 text-xs font-semibold text-gray-500 hover:text-gray-800 rounded-xl transition cursor-pointer"
+          >
+            &larr; Back
+          </button>
+        )}
         <button
           type="button"
           onClick={onBegin}
-          className="py-3 px-8 bg-[#0d9488] hover:bg-[#0b8075] active:scale-[0.99] text-white font-bold text-xs sm:text-sm rounded-xl shadow-md transition cursor-pointer"
+          className="py-3 px-8 bg-[#0d9488] hover:bg-[#0b8075] active:scale-[0.99] text-white font-bold text-xs rounded-xl shadow-md transition cursor-pointer"
         >
           Begin Screening &rarr;
         </button>
@@ -62,4 +73,3 @@ export default function Sub3Introduction({ onBegin }: Props) {
     </div>
   );
 }
-

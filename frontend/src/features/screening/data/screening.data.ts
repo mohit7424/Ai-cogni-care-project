@@ -3,6 +3,7 @@ import type {
   ScreeningQuestion,
   FinalScreeningResult,
 } from '../types/screening.types';
+import type { V2ScreeningData } from '../types/v2Screening.types';
 
 export const mockScreeningOverview: ScreeningOverview = {
   title: 'Cognitive Screening',
@@ -149,5 +150,166 @@ export const mockFinalResult: FinalScreeningResult = {
     'Continue prescribed Vitamin D routine and regular aerobic hydration.',
     'Next routine quarterly screening scheduled for December 2026.',
   ],
+};
+
+export const mockV2ScreeningData: V2ScreeningData = {
+  initialTimer: '09:45',
+  questions: [
+    {
+      id: 'q-v2-1',
+      category: 'Attention & Focus',
+      title: 'Which number comes next in the sequence?',
+      questionNumber: 1,
+      totalQuestions: 5,
+      sequence: ['2', '4', '6', '8', '?'],
+      options: ['10', '11', '12', '14'],
+      correctAnswer: '10',
+      explanation: 'Consecutive even numbers increasing by +2.',
+    },
+    {
+      id: 'q-v2-2',
+      category: 'Attention & Focus',
+      title: 'Which number completes the pattern?',
+      questionNumber: 2,
+      totalQuestions: 5,
+      sequence: ['5', '10', '15', '20', '?'],
+      options: ['22', '25', '30', '35'],
+      correctAnswer: '25',
+      explanation: 'Multiples of 5 increasing by +5.',
+    },
+    {
+      id: 'q-v2-3',
+      category: 'Attention & Focus',
+      title: 'Find the missing number in the reverse sequence:',
+      questionNumber: 3,
+      totalQuestions: 5,
+      sequence: ['30', '25', '20', '15', '?'],
+      options: ['5', '8', '10', '12'],
+      correctAnswer: '10',
+      explanation: 'Reverse sequence decreasing by -5.',
+    },
+    {
+      id: 'q-v2-4',
+      category: 'Attention & Focus',
+      title: 'Identify the next term in the geometric progression:',
+      questionNumber: 4,
+      totalQuestions: 5,
+      sequence: ['3', '6', '12', '24', '?'],
+      options: ['36', '42', '48', '50'],
+      correctAnswer: '48',
+      explanation: 'Geometric sequence doubled at each step (x 2).',
+    },
+    {
+      id: 'q-v2-5',
+      category: 'Attention & Focus',
+      title: 'Which number logically completes the square series?',
+      questionNumber: 5,
+      totalQuestions: 5,
+      sequence: ['1', '4', '9', '16', '?'],
+      options: ['20', '24', '25', '30'],
+      correctAnswer: '25',
+      explanation: 'Square numbers (1^2, 2^2, 3^2, 4^2, 5^2).',
+    },
+  ],
+  memoryRecall: {
+    instruction: 'Remember these items. You will be asked to recall them in the next step.',
+    studyTimeSeconds: 30,
+    items: [
+      { id: 'm-1', label: 'Apple', icon: '🍎' },
+      { id: 'm-2', label: 'Car', icon: '🚗' },
+      { id: 'm-3', label: 'Chair', icon: '🪑' },
+      { id: 'm-4', label: 'Tree', icon: '🌳' },
+      { id: 'm-5', label: 'Football', icon: '⚽' },
+      { id: 'm-6', label: 'Book', icon: '📕' },
+    ],
+  },
+  review: {
+    title: 'Review Your Answers',
+    subtitle: 'Please review your answers before submitting the screening.',
+    totalTimeFormatted: '12 min 35 sec',
+    sections: [
+      {
+        id: 'sec-1',
+        title: 'General Knowledge',
+        score: '5 / 5 Correct',
+        correctCount: 5,
+        totalCount: 5,
+        status: 'passed',
+      },
+      {
+        id: 'sec-2',
+        title: 'Attention & Focus',
+        score: '4 / 5 Correct',
+        correctCount: 4,
+        totalCount: 5,
+        status: 'passed',
+      },
+      {
+        id: 'sec-3',
+        title: 'Memory Recall',
+        score: '6 / 6 Correct',
+        correctCount: 6,
+        totalCount: 6,
+        status: 'passed',
+      },
+    ],
+  },
+  submission: {
+    title: 'Submitting Your Screening...',
+    subtitle: 'Please wait while we process your results. This will only take a moment.',
+    stages: [
+      { id: 'stg-1', label: 'Saving Answers', status: 'completed' },
+      { id: 'stg-2', label: 'Analyzing Results', status: 'completed' },
+      { id: 'stg-3', label: 'Generating Report', status: 'completed' },
+    ],
+  },
+  results: {
+    overallScore: 86,
+    performanceBadge: 'Good Performance',
+    disclaimer:
+      'This is a screening result and not a diagnosis. For any concerns, please consult a healthcare professional.',
+    domains: [
+      { name: 'Memory', score: '90%', percentage: 90, width: '90%' },
+      { name: 'Attention', score: '85%', percentage: 85, width: '85%' },
+      { name: 'Language', score: '88%', percentage: 88, width: '88%' },
+      { name: 'Executive Function', score: '86%', percentage: 86, width: '86%' },
+      { name: 'Processing Speed', score: '82%', percentage: 82, width: '82%' },
+    ],
+  },
+  historyAndTrends: {
+    timeframe: 'Last 6 Months',
+    sessions: [
+      {
+        id: 'sess-1',
+        date: '05 Nov 2026',
+        score: '86%',
+        scoreValue: 86,
+        status: 'Good',
+        statusBg: 'bg-emerald-50 text-emerald-700',
+      },
+      {
+        id: 'sess-2',
+        date: '10 Aug 2026',
+        score: '78%',
+        scoreValue: 78,
+        status: 'Good',
+        statusBg: 'bg-emerald-50 text-emerald-700',
+      },
+      {
+        id: 'sess-3',
+        date: '12 Jun 2026',
+        score: '72%',
+        scoreValue: 72,
+        status: 'Fair',
+        statusBg: 'bg-amber-50 text-amber-700',
+      },
+    ],
+    trendPoints: [
+      { month: 'Jun', score: 72 },
+      { month: 'Aug', score: 78 },
+      { month: 'Nov', score: 86 },
+    ],
+    motivationalTip: 'Great progress! Keep up the regular screenings for better cognitive health.',
+  },
 };
 

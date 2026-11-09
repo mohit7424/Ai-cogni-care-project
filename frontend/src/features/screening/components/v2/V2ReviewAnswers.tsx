@@ -1,19 +1,24 @@
 'use client';
 
 import React from 'react';
+import type { V2ReviewSectionItem } from '../../types';
+import { mockV2ScreeningData } from '../../data/screening.data';
 
 interface Props {
+  sections?: V2ReviewSectionItem[];
+  totalTimeFormatted?: string;
+  onEditSection?: (sectionId: string) => void;
   onBack: () => void;
   onSubmit: () => void;
 }
 
-export default function V2ReviewAnswers({ onBack, onSubmit }: Props) {
-  const sections = [
-    { title: 'General Knowledge', score: '5 / 5 Correct' },
-    { title: 'Attention & Focus', score: '4 / 5 Correct' },
-    { title: 'Memory Recall', score: '6 / 6 Correct' },
-  ];
-
+export default function V2ReviewAnswers({
+  sections = mockV2ScreeningData.review.sections,
+  totalTimeFormatted = mockV2ScreeningData.review.totalTimeFormatted,
+  onEditSection,
+  onBack,
+  onSubmit,
+}: Props) {
   return (
     <div className="space-y-4 max-w-6xl mx-auto">
       {/* Main Grid: Left Review Summary List & Right Ready To Submit Box matching screenshot 3 */}
@@ -26,18 +31,18 @@ export default function V2ReviewAnswers({ onBack, onSubmit }: Props) {
             </div>
             <div>
               <h2 className="text-xl font-bold text-gray-900 tracking-tight">
-                Review Your Answers
+                {mockV2ScreeningData.review.title}
               </h2>
               <p className="text-xs text-gray-500">
-                Please review your answers before submitting the screening.
+                {mockV2ScreeningData.review.subtitle}
               </p>
             </div>
           </div>
 
           <div className="space-y-3 pt-2">
-            {sections.map((sec, idx) => (
+            {sections.map(sec => (
               <div
-                key={idx}
+                key={sec.id}
                 className="flex items-center justify-between p-4 rounded-2xl bg-[#f8fcfa] border border-teal-100/70"
               >
                 <div className="flex items-center gap-3">
@@ -53,7 +58,7 @@ export default function V2ReviewAnswers({ onBack, onSubmit }: Props) {
                   </span>
                   <button
                     type="button"
-                    onClick={onBack}
+                    onClick={() => (onEditSection ? onEditSection(sec.id) : onBack())}
                     className="text-xs font-bold text-[#0d9488] hover:underline cursor-pointer"
                   >
                     Edit
@@ -84,7 +89,7 @@ export default function V2ReviewAnswers({ onBack, onSubmit }: Props) {
             <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mt-1">
               Total Time
             </p>
-            <h4 className="text-lg font-extrabold text-[#0d9488]">12 min 35 sec</h4>
+            <h4 className="text-lg font-extrabold text-[#0d9488]">{totalTimeFormatted}</h4>
           </div>
 
           {/* Status Box */}
@@ -109,4 +114,3 @@ export default function V2ReviewAnswers({ onBack, onSubmit }: Props) {
     </div>
   );
 }
-

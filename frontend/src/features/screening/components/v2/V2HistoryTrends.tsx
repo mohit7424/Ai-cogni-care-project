@@ -1,23 +1,19 @@
 'use client';
 
 import React from 'react';
+import type { V2ScreeningData } from '../../types';
+import { mockV2ScreeningData } from '../../data/screening.data';
 
 interface Props {
+  historyData?: V2ScreeningData['historyAndTrends'];
   onRetake: () => void;
 }
 
-export default function V2HistoryTrends({ onRetake }: Props) {
-  const sessions = [
-    { date: '05 Nov 2026', score: '86%', status: 'Good', statusBg: 'bg-emerald-50 text-emerald-700' },
-    { date: '10 Aug 2026', score: '78%', status: 'Good', statusBg: 'bg-emerald-50 text-emerald-700' },
-    { date: '12 Jun 2026', score: '72%', status: 'Fair', statusBg: 'bg-amber-50 text-amber-700' },
-  ];
-
-  const trendPoints = [
-    { month: 'Jun', score: 72 },
-    { month: 'Aug', score: 78 },
-    { month: 'Nov', score: 86 },
-  ];
+export default function V2HistoryTrends({
+  historyData = mockV2ScreeningData.historyAndTrends,
+  onRetake,
+}: Props) {
+  const { timeframe, sessions, trendPoints, motivationalTip } = historyData;
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
@@ -36,7 +32,7 @@ export default function V2HistoryTrends({ onRetake }: Props) {
         </div>
 
         <div className="flex items-center gap-1 text-xs font-semibold text-gray-600 bg-white border border-gray-200 px-3 py-1.5 rounded-lg shadow-2xs cursor-pointer">
-          <span>Last 6 Months</span>
+          <span>{timeframe}</span>
           <span>▾</span>
         </div>
       </div>
@@ -51,9 +47,9 @@ export default function V2HistoryTrends({ onRetake }: Props) {
             </h3>
 
             <div className="space-y-2.5">
-              {sessions.map((s, idx) => (
+              {sessions.map(s => (
                 <div
-                  key={idx}
+                  key={s.id}
                   className="flex items-center justify-between p-3.5 rounded-2xl bg-[#f8fcfa] border border-teal-50 hover:bg-teal-50/40 transition"
                 >
                   <div className="flex items-center gap-3">
@@ -92,7 +88,7 @@ export default function V2HistoryTrends({ onRetake }: Props) {
                 Your Progress Trend
               </h3>
               <span className="text-xs font-extrabold text-white bg-[#0d9488] px-2.5 py-0.5 rounded-full shadow-2xs">
-                86%
+                {trendPoints[trendPoints.length - 1]?.score || 86}%
               </span>
             </div>
 
@@ -129,11 +125,10 @@ export default function V2HistoryTrends({ onRetake }: Props) {
           {/* Bottom Motivation Tip matching screenshot 6 */}
           <div className="p-3 rounded-2xl bg-emerald-50/80 border border-emerald-100 text-[11px] text-emerald-900 font-medium flex items-center gap-2">
             <span>💡</span>
-            <span>Great progress! Keep up the regular screenings for better cognitive health.</span>
+            <span>{motivationalTip}</span>
           </div>
         </div>
       </div>
     </div>
   );
 }
-

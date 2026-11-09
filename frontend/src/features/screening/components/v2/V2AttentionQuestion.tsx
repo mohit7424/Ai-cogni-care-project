@@ -1,94 +1,61 @@
 'use client';
 
 import React, { useState } from 'react';
+import type { V2QuestionData } from '../../types';
+import { mockV2ScreeningData } from '../../data/screening.data';
 
-export interface V2QuestionData {
-  id: string;
-  category: string;
-  title: string;
-  questionNumber: number;
-  totalQuestions: number;
-  sequence: string[];
-  options: string[];
-  correctAnswer: string;
-  explanation?: string;
-}
-
-export const sampleQuestions: V2QuestionData[] = [
-  {
-    id: 'q-1',
-    category: 'Attention & Focus',
-    title: 'Which number comes next in the sequence?',
-    questionNumber: 1,
-    totalQuestions: 5,
-    sequence: ['2', '4', '6', '8', '?'],
-    options: ['10', '11', '12', '14'],
-    correctAnswer: '10',
-  },
-  {
-    id: 'q-2',
-    category: 'Attention & Focus',
-    title: 'Which number completes the pattern?',
-    questionNumber: 2,
-    totalQuestions: 5,
-    sequence: ['5', '10', '15', '20', '?'],
-    options: ['22', '25', '30', '35'],
-    correctAnswer: '25',
-  },
-  {
-    id: 'q-3',
-    category: 'Attention & Focus',
-    title: 'Find the missing number in the reverse sequence:',
-    questionNumber: 3,
-    totalQuestions: 5,
-    sequence: ['30', '25', '20', '15', '?'],
-    options: ['5', '8', '10', '12'],
-    correctAnswer: '10',
-  },
-  {
-    id: 'q-4',
-    category: 'Attention & Focus',
-    title: 'Identify the next term in the geometric progression:',
-    questionNumber: 4,
-    totalQuestions: 5,
-    sequence: ['3', '6', '12', '24', '?'],
-    options: ['36', '42', '48', '50'],
-    correctAnswer: '48',
-  },
-  {
-    id: 'q-5',
-    category: 'Attention & Focus',
-    title: 'Which number logically completes the series?',
-    questionNumber: 5,
-    totalQuestions: 5,
-    sequence: ['1', '4', '9', '16', '?'],
-    options: ['20', '24', '25', '30'],
-    correctAnswer: '25',
-  },
-];
+export type { V2QuestionData };
 
 interface Props {
+  questions?: V2QuestionData[];
+  currentIndex?: number;
+  selectedOption?: string;
+  onSelectOption?: (opt: string) => void;
   onNext: () => void;
   onPrevious: () => void;
   onBackToOverview: () => void;
+  timer?: string;
 }
 
-export default function V2AttentionQuestion({ onNext, onPrevious, onBackToOverview }: Props) {
-  const [qIndex, setQIndex] = useState<number>(0);
-  const [selectedAnswers, setSelectedAnswers] = useState<Record<number, string>>({
+export default function V2AttentionQuestion({
+  questions = mockV2ScreeningData.questions,
+  currentIndex,
+  selectedOption: externalSelectedOption,
+  onSelectOption,
+  onNext,
+  onPrevious,
+  onBackToOverview,
+  timer = mockV2ScreeningData.initialTimer,
+}: Props) {
+  const [internalQIndex, setInternalQIndex] = useState<number>(0);
+  const [internalAnswers, setInternalAnswers] = useState<Record<number, string>>({
     0: '10',
   });
 
-  const currentQ = sampleQuestions[qIndex];
-  const selectedOption = selectedAnswers[qIndex];
+  const isControlledIndex = typeof currentIndex === 'number';
+  const qIndex = isControlledIndex ? currentIndex : internalQIndex;
+
+  const currentQ = questions[qIndex] || questions[0];
+  const selectedOption =
+    externalSelectedOption !== undefined
+      ? externalSelectedOption
+      : internalAnswers[qIndex];
 
   function handleSelect(opt: string) {
-    setSelectedAnswers(prev => ({ ...prev, [qIndex]: opt }));
+    if (onSelectOption) {
+      onSelectOption(opt);
+    } else {
+      setInternalAnswers(prev => ({ ...prev, [qIndex]: opt }));
+    }
   }
 
   function handleNextClick() {
-    if (qIndex < sampleQuestions.length - 1) {
-      setQIndex(prev => prev + 1);
+    if (qIndex < questions.length - 1) {
+      if (!isControlledIndex) {
+        setInternalQIndex(prev => prev + 1);
+      } else {
+        onNext();
+      }
     } else {
       onNext();
     }
@@ -96,7 +63,11 @@ export default function V2AttentionQuestion({ onNext, onPrevious, onBackToOvervi
 
   function handlePrevClick() {
     if (qIndex > 0) {
-      setQIndex(prev => prev - 1);
+      if (!isControlledIndex) {
+        setInternalQIndex(prev => prev - 1);
+      } else {
+        onPrevious();
+      }
     } else {
       onPrevious();
     }
@@ -142,7 +113,7 @@ export default function V2AttentionQuestion({ onNext, onPrevious, onBackToOvervi
         {/* Green Timer Pill matching screenshot */}
         <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full">
           <span>⏱</span>
-          <span>09:45</span>
+          <span>{timer}</span>
         </div>
       </div>
 
@@ -151,7 +122,7 @@ export default function V2AttentionQuestion({ onNext, onPrevious, onBackToOvervi
         {/* Left Glowing Holographic Brain Human Profile matching screenshot 1 */}
         <div className="w-full md:w-72 h-88 rounded-3xl bg-gradient-to-tr from-[#d4f3ec] via-[#b9ecdf] to-[#99e2d1] flex flex-col items-center justify-center shadow-inner relative overflow-hidden shrink-0">
           <div className="w-48 h-48 rounded-full bg-white/40 blur-xl absolute" />
-          
+
           {/* Glowing Green Brain Hologram SVG */}
           <div className="relative z-10 flex flex-col items-center">
             <div className="w-36 h-36 rounded-full bg-white/90 shadow-md flex items-center justify-center border-2 border-teal-200/80 relative">
@@ -168,7 +139,7 @@ export default function V2AttentionQuestion({ onNext, onPrevious, onBackToOvervi
                 Active Assessment
               </span>
               <p className="text-[10px] text-teal-800 font-semibold mt-1">
-                Question {qIndex + 1} of {sampleQuestions.length}
+                Question {qIndex + 1} of {questions.length}
               </p>
             </div>
           </div>
@@ -253,7 +224,9 @@ export default function V2AttentionQuestion({ onNext, onPrevious, onBackToOvervi
               disabled={!selectedOption}
               className="py-2.5 px-6 bg-[#0d9488] hover:bg-[#0b8075] active:scale-[0.99] disabled:opacity-50 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center gap-2 cursor-pointer"
             >
-              <span>{qIndex === sampleQuestions.length - 1 ? 'Go to Memory Recall' : 'Next Question'}</span>
+              <span>
+                {qIndex === questions.length - 1 ? 'Go to Memory Recall' : 'Next Question'}
+              </span>
               <span>&rarr;</span>
             </button>
           </div>

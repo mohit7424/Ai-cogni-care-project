@@ -1,22 +1,28 @@
 'use client';
 
 import React from 'react';
+import type { V2MemoryRecallItem } from '../../types';
+import { mockV2ScreeningData } from '../../data/screening.data';
 
 interface Props {
+  items?: V2MemoryRecallItem[];
+  instruction?: string;
+  studyTimeSeconds?: number;
+  selectedItemIds?: string[];
+  onToggleItem?: (id: string) => void;
   onContinue: () => void;
   onBackToOverview: () => void;
 }
 
-export default function V2MemoryRecall({ onContinue, onBackToOverview }: Props) {
-  const items = [
-    { label: 'Apple', icon: '🍎' },
-    { label: 'Car', icon: '🚗' },
-    { label: 'Chair', icon: '🪑' },
-    { label: 'Tree', icon: '🌳' },
-    { label: 'Football', icon: '⚽' },
-    { label: 'Book', icon: '📕' },
-  ];
-
+export default function V2MemoryRecall({
+  items = mockV2ScreeningData.memoryRecall.items,
+  instruction = mockV2ScreeningData.memoryRecall.instruction,
+  studyTimeSeconds = mockV2ScreeningData.memoryRecall.studyTimeSeconds,
+  selectedItemIds,
+  onToggleItem,
+  onContinue,
+  onBackToOverview,
+}: Props) {
   return (
     <div className="space-y-4 max-w-6xl mx-auto">
       {/* Top Header */}
@@ -82,21 +88,29 @@ export default function V2MemoryRecall({ onContinue, onBackToOverview }: Props) 
               <span className="text-xs font-bold tracking-wider uppercase">Memory Recall</span>
             </div>
             <h2 className="text-lg sm:text-xl font-bold text-gray-800">
-              Remember these items. You will be asked to recall them in the next step.
+              {instruction}
             </h2>
           </div>
 
           {/* 6 Visual Object Cards (Apple, Car, Chair, Tree, Football, Book) matching screenshot 2 */}
           <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 py-3">
-            {items.map(item => (
-              <div
-                key={item.label}
-                className="h-24 rounded-2xl bg-[#f8fcfa] border border-teal-100 flex flex-col items-center justify-center p-2 shadow-2xs hover:scale-105 transition"
-              >
-                <span className="text-3xl">{item.icon}</span>
-                <span className="text-[11px] font-bold text-gray-700 mt-1.5">{item.label}</span>
-              </div>
-            ))}
+            {items.map(item => {
+              const isSelected = selectedItemIds?.includes(item.id);
+              return (
+                <div
+                  key={item.id}
+                  onClick={() => onToggleItem && onToggleItem(item.id)}
+                  className={`h-24 rounded-2xl border flex flex-col items-center justify-center p-2 shadow-2xs hover:scale-105 transition cursor-pointer ${
+                    isSelected
+                      ? 'bg-teal-50/80 border-[#0d9488] ring-2 ring-teal-200'
+                      : 'bg-[#f8fcfa] border-teal-100/80'
+                  }`}
+                >
+                  <span className="text-3xl">{item.icon}</span>
+                  <span className="text-[11px] font-bold text-gray-700 mt-1.5">{item.label}</span>
+                </div>
+              );
+            })}
           </div>
 
           {/* Timer Notice Bar */}
@@ -105,12 +119,14 @@ export default function V2MemoryRecall({ onContinue, onBackToOverview }: Props) 
               <span className="w-4 h-4 rounded-full bg-[#0d9488] text-white flex items-center justify-center text-[10px] font-bold shrink-0">
                 i
               </span>
-              <span>You have <strong>30 seconds</strong> to study these items.</span>
+              <span>
+                You have <strong>{studyTimeSeconds} seconds</strong> to study these items.
+              </span>
             </div>
 
             <div className="flex items-center gap-1.5 text-xs font-extrabold text-emerald-800 bg-white border border-teal-200 px-3 py-1 rounded-full shadow-2xs">
               <span>⏱</span>
-              <span>00:30</span>
+              <span>00:{studyTimeSeconds.toString().padStart(2, '0')}</span>
             </div>
           </div>
 
@@ -129,4 +145,3 @@ export default function V2MemoryRecall({ onContinue, onBackToOverview }: Props) 
     </div>
   );
 }
-

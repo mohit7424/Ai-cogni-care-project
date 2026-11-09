@@ -3,10 +3,14 @@
 import React, { useState } from 'react';
 
 interface Props {
-  onBackToHistory: () => void;
+  onBackToHistory?: () => void;
+  onRetakeScreening?: () => void;
 }
 
-export default function Sub10DetailedTrends({ onBackToHistory }: Props) {
+export default function Sub10DetailedTrends({
+  onBackToHistory,
+  onRetakeScreening,
+}: Props) {
   const [filter, setFilter] = useState<'6m' | '1y' | 'all'>('6m');
 
   const points = [
@@ -62,60 +66,63 @@ export default function Sub10DetailedTrends({ onBackToHistory }: Props) {
             </button>
           </div>
 
-          <button
-            type="button"
-            onClick={onBackToHistory}
-            className="text-xs font-bold text-[#0d9488] hover:underline"
-          >
-            &larr; Back
-          </button>
+          {onBackToHistory && (
+            <button
+              type="button"
+              onClick={onBackToHistory}
+              className="py-1.5 px-3 bg-teal-50 hover:bg-teal-100 text-[#0d9488] font-bold text-xs rounded-xl transition cursor-pointer"
+            >
+              &larr; Back to History
+            </button>
+          )}
+
+          {onRetakeScreening && (
+            <button
+              type="button"
+              onClick={onRetakeScreening}
+              className="py-1.5 px-3 bg-[#0d9488] hover:bg-[#0b8075] text-white font-bold text-xs rounded-xl transition cursor-pointer"
+            >
+              New Screening
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Grid: Main Line Chart (Left) & Comparison Stats Box with Brain Graphic (Right) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-        {/* Left: Trend Line Chart */}
-        <div className="lg:col-span-8 p-6 rounded-2xl bg-[#fbfdfc] border border-gray-100 space-y-4">
-          <div className="relative h-56 flex flex-col justify-between pt-4 pb-6">
-            {/* Horizontal Grid lines with Y-Axis */}
+      {/* 2-Column Grid: Left Trend Visual Area & Right Comparison Card */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        {/* Left Chart Area */}
+        <div className="lg:col-span-8 p-6 rounded-2xl bg-[#f8fcfa] border border-teal-100/70 flex flex-col justify-between space-y-6">
+          <div className="relative h-56 flex flex-col justify-between pt-2 pb-4">
+            {/* Gridlines */}
             <div className="absolute inset-0 flex flex-col justify-between text-[10px] text-gray-400 pointer-events-none">
-              <div className="border-b border-gray-100 flex items-center justify-between pb-0.5">
-                <span>100</span>
-              </div>
-              <div className="border-b border-gray-100 flex items-center justify-between pb-0.5">
-                <span>75</span>
-              </div>
-              <div className="border-b border-gray-100 flex items-center justify-between pb-0.5">
-                <span>50</span>
-              </div>
-              <div className="border-b border-gray-100 flex items-center justify-between pb-0.5">
-                <span>25</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span>0</span>
-              </div>
+              <div className="border-b border-gray-100">100</div>
+              <div className="border-b border-gray-100">75</div>
+              <div className="border-b border-gray-100">50</div>
+              <div className="border-b border-gray-100">25</div>
+              <div className="border-b border-gray-100">0</div>
             </div>
 
-            {/* Connecting Teal Line Representation */}
+            {/* Points on Line */}
             <div className="relative h-full flex items-end justify-between px-6 z-10">
-              {points.map(pt => (
-                <div key={pt.month} className="flex flex-col items-center gap-1.5 h-full justify-end">
-                  <span className="text-[11px] font-extrabold text-[#0d9488] bg-teal-50 px-1.5 py-0.5 rounded-md shadow-2xs">
-                    {pt.score}%
+              {points.map(p => (
+                <div key={p.month} className="flex flex-col items-center gap-1.5 h-full justify-end">
+                  <span className="text-[10px] font-bold text-[#0d9488] bg-teal-50 px-1.5 py-0.5 rounded shadow-2xs">
+                    {p.score}%
                   </span>
-                  {/* Point Marker */}
                   <div className="w-3.5 h-3.5 rounded-full bg-[#0d9488] ring-4 ring-teal-100 shadow-xs" />
-                  <span className="text-[11px] font-semibold text-gray-500 mt-1">
-                    {pt.month}
-                  </span>
+                  <span className="text-[11px] font-semibold text-gray-500 mt-1">{p.month}</span>
                 </div>
               ))}
             </div>
           </div>
+
+          <div className="p-3 rounded-xl bg-teal-50/70 border border-teal-100 text-xs text-teal-800 font-medium text-center">
+            Consistent cognitive stability maintained over the last assessment cycle.
+          </div>
         </div>
 
-        {/* Right: Comparison Card with Brain Graphic matching screenshot */}
-        <div className="lg:col-span-4 p-6 rounded-2xl bg-gradient-to-br from-[#ebf9f5] to-[#dbf4ee] border border-teal-200/80 flex flex-col justify-between h-full space-y-4">
+        {/* Right Comparison Card matching screenshot */}
+        <div className="lg:col-span-4 p-6 rounded-2xl bg-gradient-to-br from-[#e8f7f3] to-[#d4f2ec] border border-teal-200/80 flex flex-col justify-between space-y-4">
           <div>
             <span className="text-[10px] font-bold uppercase tracking-wider text-teal-800">
               Comparison

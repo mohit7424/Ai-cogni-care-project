@@ -1,16 +1,10 @@
-'use client';
+import { DailySupportScreen } from '@/features/daily-support/screens';
+
+export const metadata = {
+  title: 'Daily Support & Cognitive Activities | Cogni Care',
+  description: 'Daily cognitive training, interactive exercises, games and mental wellness',
+};
 
 export default function DailySupportPage() {
-  return (
-    <div className="bg-white rounded-2xl border border-teal-100/80 p-8 shadow-xs">
-      <span className="text-[10px] font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-2.5 py-1 rounded-full">
-        Daily Wellness
-      </span>
-      <h1 className="text-2xl font-bold text-gray-800 mt-3 mb-2">Daily Support & Activities</h1>
-      <p className="text-xs text-gray-500 mb-6">
-        Daily cognitive exercises, mental workouts, and caregiver check-ins.
-      </p>
-    </div>
-  );
+  return <DailySupportScreen />;
 }
-

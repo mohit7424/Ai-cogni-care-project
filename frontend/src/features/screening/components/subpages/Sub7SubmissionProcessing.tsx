@@ -3,16 +3,18 @@
 import React, { useEffect } from 'react';
 
 interface Props {
-  onComplete: () => void;
+  onComplete?: () => void;
+  onDone?: () => void;
 }
 
-export default function Sub7SubmissionProcessing({ onComplete }: Props) {
+export default function Sub7SubmissionProcessing({ onComplete, onDone }: Props) {
   useEffect(() => {
     const timer = setTimeout(() => {
-      onComplete();
+      if (onComplete) onComplete();
+      if (onDone) onDone();
     }, 1800);
     return () => clearTimeout(timer);
-  }, [onComplete]);
+  }, [onComplete, onDone]);
 
   return (
     <div className="bg-white rounded-3xl border border-teal-100/80 p-12 shadow-xs max-w-xl mx-auto text-center space-y-6">
@@ -45,4 +47,3 @@ export default function Sub7SubmissionProcessing({ onComplete }: Props) {
     </div>
   );
 }
-

@@ -4,11 +4,14 @@ import type {
   ScreeningHistoryItem,
   ScreeningQuestion,
   FinalScreeningResult,
-} from '../types/screening.types';
+  V2ScreeningData,
+  V2ScreeningResultData,
+} from '../types';
 import {
   mockScreeningOverview,
   mockQuestions,
   mockFinalResult,
+  mockV2ScreeningData,
 } from '../data/screening.data';
 
 export async function getScreeningOverview(): Promise<ScreeningOverview> {
@@ -69,3 +72,30 @@ export async function startNewScreeningSession(): Promise<{ sessionId: string }>
     return { sessionId: 'session-moca-live-1' };
   }
 }
+
+export async function getV2ScreeningData(): Promise<V2ScreeningData> {
+  try {
+    const res = await authService.get<V2ScreeningData>('/screening/v2/data');
+    if (res.data && res.data.questions && res.data.questions.length > 0) {
+      return res.data;
+    }
+    return mockV2ScreeningData;
+  } catch {
+    return mockV2ScreeningData;
+  }
+}
+
+export async function submitV2ScreeningAnswers(
+  answers: Record<string, string>
+): Promise<V2ScreeningResultData> {
+  try {
+    const res = await authService.post<V2ScreeningResultData>('/screening/v2/submit', { answers });
+    if (res.data && res.data.overallScore) {
+      return res.data;
+    }
+    return mockV2ScreeningData.results;
+  } catch {
+    return mockV2ScreeningData.results;
+  }
+}
+

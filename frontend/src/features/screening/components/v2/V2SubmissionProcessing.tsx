@@ -1,12 +1,22 @@
 'use client';
 
 import React, { useEffect } from 'react';
+import type { V2SubmissionStageItem } from '../../types';
+import { mockV2ScreeningData } from '../../data/screening.data';
 
 interface Props {
+  stages?: V2SubmissionStageItem[];
+  title?: string;
+  subtitle?: string;
   onComplete: () => void;
 }
 
-export default function V2SubmissionProcessing({ onComplete }: Props) {
+export default function V2SubmissionProcessing({
+  stages = mockV2ScreeningData.submission.stages,
+  title = mockV2ScreeningData.submission.title,
+  subtitle = mockV2ScreeningData.submission.subtitle,
+  onComplete,
+}: Props) {
   useEffect(() => {
     const timer = setTimeout(() => {
       onComplete();
@@ -26,10 +36,10 @@ export default function V2SubmissionProcessing({ onComplete }: Props) {
         {/* Text and animated progress bar */}
         <div className="space-y-3 max-w-md">
           <h2 className="text-2xl font-extrabold text-gray-900 tracking-tight">
-            Submitting Your Screening...
+            {title}
           </h2>
           <p className="text-xs text-gray-500 leading-relaxed">
-            Please wait while we process your results. This will only take a moment.
+            {subtitle}
           </p>
           <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
             <div className="h-full bg-gradient-to-r from-teal-400 to-[#0d9488] rounded-full animate-pulse w-4/5" />
@@ -39,32 +49,24 @@ export default function V2SubmissionProcessing({ onComplete }: Props) {
 
       {/* 3 Pipeline Stages matching screenshot 4: Saving Answers -> Analyzing Results -> Generating Report */}
       <div className="pt-4 border-t border-gray-100 flex items-center justify-between max-w-2xl mx-auto px-4 text-xs font-semibold text-gray-700">
-        <div className="flex items-center gap-2 text-[#0d9488]">
-          <span className="w-5 h-5 rounded-full bg-[#0d9488] text-white flex items-center justify-center text-[10px] font-bold">
-            ✓
-          </span>
-          <span>Saving Answers</span>
-        </div>
-
-        <span className="h-0.5 w-16 bg-[#0d9488]" />
-
-        <div className="flex items-center gap-2 text-[#0d9488]">
-          <span className="w-5 h-5 rounded-full bg-[#0d9488] text-white flex items-center justify-center text-[10px] font-bold">
-            ✓
-          </span>
-          <span>Analyzing Results</span>
-        </div>
-
-        <span className="h-0.5 w-16 bg-[#0d9488]" />
-
-        <div className="flex items-center gap-2 text-gray-400">
-          <span className="w-5 h-5 rounded-full bg-teal-100 text-[#0d9488] flex items-center justify-center text-[10px] font-bold animate-spin">
-            ⚙
-          </span>
-          <span>Generating Report</span>
-        </div>
+        {stages.map((stage, idx) => (
+          <React.Fragment key={stage.id}>
+            <div className={`flex items-center gap-2 ${idx < stages.length - 1 ? 'text-[#0d9488]' : 'text-gray-500'}`}>
+              <span
+                className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
+                  idx < stages.length - 1
+                    ? 'bg-[#0d9488] text-white'
+                    : 'bg-teal-100 text-[#0d9488] animate-spin'
+                }`}
+              >
+                {idx < stages.length - 1 ? '✓' : '⚙'}
+              </span>
+              <span>{stage.label}</span>
+            </div>
+            {idx < stages.length - 1 && <span className="h-0.5 w-16 bg-[#0d9488]" />}
+          </React.Fragment>
+        ))}
       </div>
     </div>
   );
 }
-
