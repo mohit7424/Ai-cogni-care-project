@@ -1,26 +1,183 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *, .dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fcfa;
+  --foreground: #0f172a;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+[data-theme='dark'],
+.dark {
+  --background: #061815;
+  --foreground: #f8fafc;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* ========================================================
+   GLOBAL COMPREHENSIVE DARK MODE SYSTEM
+   Automatically styles all surfaces, cards, and text in .dark
+   ======================================================== */
+
+.dark {
+  color-scheme: dark;
+}
+
+/* Page background */
+.dark body,
+.dark main,
+.dark [class*="bg-[#f8fcfa]"],
+.dark [class*="bg-[#f9fdfc]"],
+.dark [class*="bg-[#fbfdfc]"] {
+  background-color: #061815 !important;
+}
+
+/* Light Mint Gradients in Dark Mode */
+.dark [class*="from-[#e7f7f4]"],
+.dark [class*="from-[#edf9f7]"],
+.dark [class*="from-[#e8f8f5]"],
+.dark [class*="from-[#ebf9f5]"],
+.dark [class*="from-[#e8f7f3]"] {
+  background-image: none !important;
+  background-color: #0a2923 !important;
+  border-color: #14483e !important;
+}
+
+/* Main Cards & Containers */
+.dark .bg-white,
+.dark [class*="bg-white/"] {
+  background-color: #0c2b24 !important;
+  border-color: #154c40 !important;
+  color: #f8fafc !important;
+}
+
+/* Secondary / Nested Sub-Cards & Panels */
+.dark .bg-gray-50,
+.dark .bg-teal-50,
+.dark .bg-teal-50\/40,
+.dark .bg-teal-50\/50,
+.dark .bg-teal-50\/60,
+.dark .bg-teal-50\/70,
+.dark .bg-teal-50\/80,
+.dark [class*="bg-[#f0faf7]"],
+.dark [class*="bg-[#e6f7f3]"],
+.dark [class*="bg-[#f2faf7]"],
+.dark [class*="bg-[#e8f7f4]"],
+.dark [class*="bg-[#f3faf7]"] {
+  background-color: #0f352c !important;
+  border-color: #19584b !important;
+}
+
+/* Navbar */
+.dark header {
+  background-color: #09221d !important;
+  border-bottom-color: #123d34 !important;
+}
+
+/* Text Colors */
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark .text-gray-900,
+.dark .text-gray-800,
+.dark [class*="text-[#0a3832]"] {
+  color: #f8fafc !important;
+}
+
+.dark p,
+.dark span.text-gray-700,
+.dark .text-gray-700 {
+  color: #e2e8f0 !important;
+}
+
+.dark .text-gray-600,
+.dark .text-gray-500,
+.dark .text-gray-400 {
+  color: #94a3b8 !important;
+}
+
+/* Form Inputs, Selects & Textareas */
+.dark input[type="text"],
+.dark input[type="email"],
+.dark input[type="tel"],
+.dark input[type="password"],
+.dark input[type="search"],
+.dark select,
+.dark textarea {
+  background-color: #0d2e27 !important;
+  color: #f8fafc !important;
+  border-color: #19584b !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #64748b !important;
+}
+
+/* Borders */
+.dark [class*="border-gray-100"],
+.dark [class*="border-gray-200"],
+.dark [class*="border-teal-100"],
+.dark [class*="border-teal-200"] {
+  border-color: #154c40 !important;
+}
+
+/* Badges & Tags */
+.dark .bg-emerald-50,
+.dark .bg-teal-100 {
+  background-color: #124138 !important;
+  color: #2dd4bf !important;
+  border-color: #155c4e !important;
+}
+
+.dark .bg-amber-50 {
+  background-color: #3b2a10 !important;
+  color: #fbbf24 !important;
+  border-color: #5c4118 !important;
+}
+
+.dark .bg-rose-50 {
+  background-color: #3f1218 !important;
+  color: #fb7185 !important;
+  border-color: #601824 !important;
+}
+
+/* Light / Secondary Buttons in Dark Mode */
+.dark button.bg-white,
+.dark a.bg-white {
+  background-color: #0f352c !important;
+  color: #f8fafc !important;
+  border-color: #19584b !important;
+}
+
+.dark button.bg-white:hover,
+.dark a.bg-white:hover {
+  background-color: #144439 !important;
+}
+
+/* Primary Teal Buttons: Keep Vibrant High Contrast */
+.dark button.bg-\[\#0a3832\],
+.dark button.bg-\[\#0d9488\],
+.dark a.bg-\[\#0a3832\],
+.dark a.bg-\[\#0d9488\] {
+  background-color: #0d9488 !important;
+  color: #ffffff !important;
+}
+
+.dark button.bg-\[\#0a3832\]:hover,
+.dark button.bg-\[\#0d9488\]:hover {
+  background-color: #0f766e !important;
+}
+
+/* Modals & Dialogs */
+.dark .fixed .bg-white {
+  background-color: #0c2b24 !important;
+  border-color: #19584b !important;
 }
