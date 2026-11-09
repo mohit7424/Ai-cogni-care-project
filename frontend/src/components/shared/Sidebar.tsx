@@ -97,7 +97,7 @@ export const defaultNavItems: NavItem[] = [
   },
   {
     id: 'mri',
-    label: 'MRI Analysis',
+    label: 'MRI',
     href: '/dashboard/mri',
     icon: (
       <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
@@ -206,7 +206,7 @@ export default function Sidebar({
         </div>
 
         <Link
-          href="/dashboard/settings"
+          href="/dashboard/profile"
           className="flex items-center justify-between p-2.5 rounded-xl bg-[#0d443c]/70 hover:bg-[#0d443c] transition cursor-pointer"
         >
           <div className="flex items-center gap-2.5">

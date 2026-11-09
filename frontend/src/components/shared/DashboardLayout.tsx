@@ -18,12 +18,12 @@ export default function DashboardLayout({
   onSearchChange,
 }: DashboardLayoutProps) {
   return (
-    <div className="h-screen w-screen overflow-hidden flex bg-[#f8fcfa] font-sans">
+    <div className="h-screen w-screen overflow-hidden flex bg-[#f8fcfa] dark:bg-[#061815] font-sans transition-colors duration-200">
       {/* Left Full-Height Sidebar */}
       <Sidebar />
 
       {/* Right Main Content Area (Full Width & Height) */}
-      <div className="flex-1 flex flex-col h-full min-w-0 overflow-hidden bg-[#f8fcfa]">
+      <div className="flex-1 flex flex-col h-full min-w-0 overflow-hidden bg-[#f8fcfa] dark:bg-[#061815] transition-colors duration-200">
         {/* Sticky Top Navbar */}
         <Navbar
           userName={userName}
