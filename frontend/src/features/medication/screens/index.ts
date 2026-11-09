@@ -1,0 +1,2 @@
+export { default as MedicationScreen } from './MedicationScreen';
+
