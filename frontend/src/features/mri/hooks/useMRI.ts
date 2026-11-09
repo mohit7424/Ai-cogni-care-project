@@ -4,6 +4,7 @@ import type { MRIAnalysisData, MRIScanRecord } from '../types/mri.types';
 
 export function useMRI() {
   const [data, setData] = useState<MRIAnalysisData>(mockMRIData);
+  const [currentScan, setCurrentScan] = useState<MRIScanRecord>(mockMRIData.historyScans[0]);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadSuccessMessage, setUploadSuccessMessage] = useState<string | null>(null);
   const [isHistoryOpen, setIsHistoryOpen] = useState<boolean>(false);
@@ -24,6 +25,7 @@ export function useMRI() {
         fileSize: `${(file.size / (1024 * 1024) || 78.4).toFixed(1)} MB`,
       };
 
+      setCurrentScan(newScan);
       setData(prev => ({
         ...prev,
         historyScans: [newScan, ...prev.historyScans],
@@ -47,11 +49,13 @@ export function useMRI() {
   }
 
   function handleSelectHistoryScan(scan: MRIScanRecord) {
+    setCurrentScan(scan);
     setIsHistoryOpen(false);
   }
 
   return {
     data,
+    currentScan,
     isUploading,
     uploadSuccessMessage,
     isHistoryOpen,
@@ -60,4 +64,3 @@ export function useMRI() {
     handleSelectHistoryScan,
   };
 }
-

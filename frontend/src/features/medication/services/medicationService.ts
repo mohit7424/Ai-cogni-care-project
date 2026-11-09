@@ -45,3 +45,5 @@ export async function createNewMedicationDose(
   }
 }
 
+export const addMedicationDose = createNewMedicationDose;
+

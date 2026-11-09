@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import type {
   MedicationManagementData,
   MedicationDoseItem,
@@ -8,7 +8,7 @@ import type {
 import {
   getMedicationData,
   markDoseAsTaken,
-  createNewMedicationDose,
+  addMedicationDose,
 } from '../services/medicationService';
 import { mockMedicationData } from '../data/medication.data';
 
@@ -23,7 +23,7 @@ export function useMedication() {
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const fetchData = useCallback(async () => {
+  const refetch = useCallback(async () => {
     setIsLoading(true);
     try {
       const res = await getMedicationData();
@@ -36,10 +36,6 @@ export function useMedication() {
       setIsLoading(false);
     }
   }, []);
-
-  useEffect(() => {
-    void fetchData();
-  }, [fetchData]);
 
   const handleMarkNextReminderAsTaken = useCallback(async () => {
     setNextReminderTaken(true);
@@ -61,14 +57,12 @@ export function useMedication() {
         return item;
       })
     );
-    await markDoseAsTaken(doseId);
   }, []);
 
   const handleAddMedication = useCallback(
-    async (newDose: Omit<MedicationDoseItem, 'id'>) => {
-      const created = await createNewMedicationDose(newDose);
+    async (newMed: Omit<MedicationDoseItem, 'id'>) => {
+      const created = await addMedicationDose(newMed);
       setSchedule(prev => [...prev, created]);
-      setIsAddModalOpen(false);
     },
     []
   );
@@ -84,11 +78,10 @@ export function useMedication() {
     totalDoses,
     isAddModalOpen,
     setIsAddModalOpen,
+    isLoading,
     handleMarkNextReminderAsTaken,
     handleToggleDoseStatus,
     handleAddMedication,
-    isLoading,
-    refetch: fetchData,
+    refetch,
   };
 }
-

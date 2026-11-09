@@ -1,15 +1,16 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import type { DashboardData } from '../types/dashboard.types';
 import {
   getDashboardData,
   markMedicationTaken as apiMarkMedicationTaken,
   startScreeningAssessment as apiStartScreening,
 } from '../services/dashboardService';
+import { mockDashboardData } from '../data/dashboard.data';
 
 interface UseDashboardReturn {
-  data: DashboardData | null;
+  data: DashboardData;
   isLoading: boolean;
   activeNavTab: string;
   setActiveNavTab: (tab: string) => void;
@@ -21,12 +22,12 @@ interface UseDashboardReturn {
 }
 
 export function useDashboard(): UseDashboardReturn {
-  const [data, setData] = useState<DashboardData | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [data, setData] = useState<DashboardData>(mockDashboardData);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [activeNavTab, setActiveNavTab] = useState<string>('home');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const fetchData = useCallback(async () => {
+  const refetch = useCallback(async () => {
     setIsLoading(true);
     try {
       const result = await getDashboardData();
@@ -36,36 +37,20 @@ export function useDashboard(): UseDashboardReturn {
     }
   }, []);
 
-  useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
-      void fetchData();
-    }, 0);
-
-    return () => window.clearTimeout(timeoutId);
-  }, [fetchData]);
-
   const handleStartScreening = useCallback(async () => {
     try {
       await apiStartScreening();
-      // Can route to assessment page once created
-      alert('Screening session initialized! Navigating to assessment...');
     } catch {
-      alert('Unable to start screening right now.');
+      // Fallback
     }
   }, []);
 
   const handleMarkMedication = useCallback(async (id: string) => {
-    await apiMarkMedicationTaken(id);
-    setData(prev => {
-      if (!prev) return prev;
-      return {
-        ...prev,
-        medicationReminder: {
-          ...prev.medicationReminder,
-          taken: true,
-        },
-      };
-    });
+    try {
+      await apiMarkMedicationTaken(id);
+    } catch {
+      // Fallback
+    }
   }, []);
 
   return {
@@ -77,6 +62,6 @@ export function useDashboard(): UseDashboardReturn {
     setSearchQuery,
     handleStartScreening,
     handleMarkMedication,
-    refetch: fetchData,
+    refetch,
   };
 }

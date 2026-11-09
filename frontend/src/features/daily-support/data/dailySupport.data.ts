@@ -218,7 +218,7 @@ export const mockNumberSeriesChallenges: NumberSeriesChallenge[] = [
     sequence: ['7', '3', '9', '5', '11', '?'],
     options: ['7', '8', '13', '6'],
     correctAnswer: '7',
-    explanation: 'Alternating operators: -4, +6, -4, +6, -4. (11 - 4 = 7).',
+    ruleExplanation: 'Alternating operators: -4, +6, -4, +6, -4. (11 - 4 = 7).',
     hint: 'Look at the jump from 7 to 3 (-4) and from 3 to 9 (+6).',
   },
   {
@@ -227,7 +227,7 @@ export const mockNumberSeriesChallenges: NumberSeriesChallenge[] = [
     sequence: ['2', '6', '18', '54', '?'],
     options: ['162', '108', '148', '216'],
     correctAnswer: '162',
-    explanation: 'Each term is multiplied by 3 (2x3=6, 6x3=18, 18x3=54, 54x3=162).',
+    ruleExplanation: 'Each term is multiplied by 3 (2x3=6, 6x3=18, 18x3=54, 54x3=162).',
     hint: 'Check the ratio between consecutive numbers.',
   },
   {
@@ -236,7 +236,7 @@ export const mockNumberSeriesChallenges: NumberSeriesChallenge[] = [
     sequence: ['1', '1', '2', '3', '5', '8', '?'],
     options: ['13', '11', '12', '16'],
     correctAnswer: '13',
-    explanation: 'Each number is the sum of the preceding two numbers (5 + 8 = 13).',
+    ruleExplanation: 'Each number is the sum of the preceding two numbers (5 + 8 = 13).',
     hint: 'Add 5 and 8 together.',
   },
 ];

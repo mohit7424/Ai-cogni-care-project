@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import type { DailySupportView } from '../types/dailySupport.types';
 import { useDailySupport } from '../hooks/useDailySupport';
 import {
   SupportOverviewView,

@@ -56,7 +56,7 @@ export default function ProgressChartCard({
                   className={`w-full max-w-[42px] rounded-t-lg transition-all duration-300 ${
                     item.isCurrent
                       ? 'bg-[#14b8a6] shadow-sm shadow-teal-500/20'
-                      : 'bg-[#d8f2ee] hover:bg-[#bfeae3]'
+                      : 'bg-[#d8f2ee] hover:bg-[#bfeae3] dark:bg-[#124b41] dark:hover:bg-[#186255]'
                   }`}
                 />
                 <span

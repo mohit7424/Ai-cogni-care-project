@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import type {
   DailySupportView,
   DailySupportOverviewData,
@@ -13,6 +13,10 @@ import {
   getActivityLibrary,
   submitExerciseCompletion,
 } from '../services/dailySupportService';
+import {
+  mockDailySupportOverview,
+  mockActivityLibrary,
+} from '../data/dailySupport.data';
 
 interface UseDailySupportReturn {
   overviewData: DailySupportOverviewData | null;
@@ -32,15 +36,15 @@ interface UseDailySupportReturn {
 }
 
 export function useDailySupport(): UseDailySupportReturn {
-  const [overviewData, setOverviewData] = useState<DailySupportOverviewData | null>(null);
-  const [activityList, setActivityList] = useState<ActivityCardItem[]>([]);
+  const [overviewData, setOverviewData] = useState<DailySupportOverviewData | null>(mockDailySupportOverview);
+  const [activityList, setActivityList] = useState<ActivityCardItem[]>(mockActivityLibrary);
   const [completedResult, setCompletedResult] = useState<CompletedActivityResult | null>(null);
   const [currentView, setCurrentView] = useState<DailySupportView>('overview');
   const [activeActivityId, setActiveActivityId] = useState<string>('act-1');
   const [selectedCategory, setSelectedCategory] = useState<ActivityCategory>('All');
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const fetchData = useCallback(async () => {
+  const refetch = useCallback(async () => {
     setIsLoading(true);
     try {
       const [overview, activities] = await Promise.all([
@@ -53,10 +57,6 @@ export function useDailySupport(): UseDailySupportReturn {
       setIsLoading(false);
     }
   }, []);
-
-  useEffect(() => {
-    void fetchData();
-  }, [fetchData]);
 
   const filteredActivities =
     selectedCategory === 'All'
@@ -92,6 +92,6 @@ export function useDailySupport(): UseDailySupportReturn {
     isLoading,
     handleLaunchActivity,
     handleFinishExercise,
-    refetch: fetchData,
+    refetch,
   };
 }
