@@ -17,7 +17,7 @@ export default function LoginScreen() {
   function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     void handleSubmit(() => {
-      router.push('/auth/role-select');
+      router.push('/dashboard');
     });
   }
 
