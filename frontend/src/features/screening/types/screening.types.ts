@@ -61,3 +61,4 @@ export interface FinalScreeningResult {
   breakdown: ScreeningResultCategory[];
   recommendations: string[];
 }
+
