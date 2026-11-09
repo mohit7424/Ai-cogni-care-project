@@ -1,0 +1,81 @@
+import type { CTScanPageData } from '../types/ctScan.types';
+
+export const mockCTScanData: CTScanPageData = {
+  pageTitle: 'CT Scan',
+  subtitle: 'Upload and view your CT scan reports.',
+  supportedFormats: ['DICOM', 'JPG', 'PNG', 'PDF'],
+  maxFileSize: 'Maximum file size: 150MB',
+  complianceText: 'HIPAA-compliant end-to-end encrypted storage',
+  currentScan: {
+    id: 'ct-84920',
+    uploadedDate: '05 Nov 2026',
+    uploadedTime: '10:30 AM',
+    status: 'Completed',
+    scanType: 'Axial Brain Non-Contrast',
+    slicesAnalyzed: '64 Slices (0.625mm)',
+    fileName: 'brain_ct_axial_nov2026.dcm',
+    fileSize: '42.8 MB',
+  },
+  diagnosticSummary: {
+    title: 'Diagnostic Summary & Clinical Notes',
+    subtitle: 'Automated AI volumetric assessment cross-referenced with medical records.',
+    radiologistVerified: true,
+    radiologistName: 'Dr. E. Martinez, MD',
+    metrics: [
+      {
+        id: 'm-1',
+        label: 'CEREBRAL VOLUME RATIO',
+        value: 'Normal (82.4%)',
+        subtext: 'Consistent with baseline (0.2% variance)',
+        statusColor: 'emerald',
+      },
+      {
+        id: 'm-2',
+        label: 'HIPPOCAMPAL INTEGRITY',
+        value: 'Grade 1 (Intact)',
+        subtext: 'No evidence of acute temporal atrophy',
+        statusColor: 'gray',
+      },
+      {
+        id: 'm-3',
+        label: 'VASCULAR MARKER SCORE',
+        value: 'Minimal White Matter',
+        subtext: 'Fazekas scale score 1, age-appropriate',
+        statusColor: 'gray',
+      },
+    ],
+  },
+  scanHistory: [
+    {
+      id: 'ct-84920',
+      uploadedDate: '05 Nov 2026',
+      uploadedTime: '10:30 AM',
+      status: 'Completed',
+      scanType: 'Axial Brain Non-Contrast',
+      slicesAnalyzed: '64 Slices (0.625mm)',
+      fileName: 'brain_ct_axial_nov2026.dcm',
+      fileSize: '42.8 MB',
+    },
+    {
+      id: 'ct-81204',
+      uploadedDate: '14 May 2026',
+      uploadedTime: '02:15 PM',
+      status: 'Completed',
+      scanType: 'Axial Brain Contrast Enhanced',
+      slicesAnalyzed: '128 Slices (0.5mm)',
+      fileName: 'brain_ct_axial_may2026.dcm',
+      fileSize: '68.4 MB',
+    },
+    {
+      id: 'ct-78401',
+      uploadedDate: '10 Nov 2025',
+      uploadedTime: '09:00 AM',
+      status: 'Completed',
+      scanType: 'Baseline Axial Brain Non-Contrast',
+      slicesAnalyzed: '64 Slices (0.625mm)',
+      fileName: 'brain_ct_baseline_2025.dcm',
+      fileSize: '41.2 MB',
+    },
+  ],
+};
+
