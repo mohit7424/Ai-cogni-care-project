@@ -42,18 +42,17 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>('light');
 
   useEffect(() => {
+    // By default, light mode is active unless user explicitly saved 'dark' in localStorage
     const saved = localStorage.getItem('cogni-theme') as Theme | null;
     let preferred: Theme = 'light';
     if (saved === 'dark' || saved === 'light') {
       preferred = saved;
-    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      preferred = 'dark';
     }
 
-    if (preferred !== 'light') {
+    if (preferred === 'dark') {
       queueMicrotask(() => {
-        setThemeState(preferred);
-        applyThemeToDom(preferred);
+        setThemeState('dark');
+        applyThemeToDom('dark');
       });
     } else {
       applyThemeToDom('light');
