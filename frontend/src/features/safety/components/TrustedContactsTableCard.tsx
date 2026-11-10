@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import type { TrustedContactItem } from '../types/safety.types';
 
 interface Props {
@@ -109,9 +110,11 @@ export default function TrustedContactsTableCard({
                     <td className="py-3.5 px-4 sm:px-2">
                       <div className="flex items-center gap-3">
                         {contact.avatarUrl ? (
-                          <img
+                          <Image
                             src={contact.avatarUrl}
                             alt={contact.name}
+                            width={36}
+                            height={36}
                             className="w-9 h-9 rounded-full object-cover ring-2 ring-teal-100 dark:ring-teal-800"
                           />
                         ) : (
@@ -205,9 +208,11 @@ export default function TrustedContactsTableCard({
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3 min-w-0">
                   {contact.avatarUrl ? (
-                    <img
+                    <Image
                       src={contact.avatarUrl}
                       alt={contact.name}
+                      width={40}
+                      height={40}
                       className="w-10 h-10 rounded-full object-cover shrink-0 ring-2 ring-teal-100 dark:ring-teal-800"
                     />
                   ) : (

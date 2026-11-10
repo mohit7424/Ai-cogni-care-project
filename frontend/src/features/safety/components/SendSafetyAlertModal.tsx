@@ -19,24 +19,19 @@ export default function SendSafetyAlertModal({
   const [isCountingDown, setIsCountingDown] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!isOpen) {
-      setIsCountingDown(false);
-      setCountdown(5);
-      return;
-    }
-  }, [isOpen]);
-
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
     if (isCountingDown && countdown > 0) {
-      timer = setTimeout(() => {
+      const timer = setTimeout(() => {
+        if (countdown === 1) {
+          setCountdown(0);
+          setIsCountingDown(false);
+          onConfirm();
+          return;
+        }
         setCountdown(prev => prev - 1);
       }, 1000);
-    } else if (isCountingDown && countdown === 0) {
-      setIsCountingDown(false);
-      onConfirm();
+      return () => clearTimeout(timer);
     }
-    return () => clearTimeout(timer);
+    return undefined;
   }, [isCountingDown, countdown, onConfirm]);
 
   if (!isOpen) return null;

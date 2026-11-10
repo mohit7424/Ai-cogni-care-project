@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import type { TrustedContactItem } from '../types/safety.types';
 
 interface Props {
@@ -16,25 +16,16 @@ export default function EditContactModal({
   onClose,
   onSave,
 }: Props) {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [relationship, setRelationship] = useState('Sister');
-  const [phone, setPhone] = useState('');
-
-  useEffect(() => {
-    if (contact) {
-      setName(contact.name);
-      setEmail(contact.email);
-      setRelationship(contact.relationship);
-      setPhone(contact.phone);
-    }
-  }, [contact]);
+  const [name, setName] = useState(contact?.name ?? '');
+  const [email, setEmail] = useState(contact?.email ?? '');
+  const [relationship, setRelationship] = useState(contact?.relationship ?? 'Sister');
+  const [phone, setPhone] = useState(contact?.phone ?? '');
 
   if (!isOpen || !contact) return null;
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!name.trim() || !phone.trim()) return;
+    if (!contact || !name.trim() || !phone.trim()) return;
 
     const initials = name
       .split(' ')
@@ -154,4 +145,3 @@ export default function EditContactModal({
     </div>
   );
 }
-

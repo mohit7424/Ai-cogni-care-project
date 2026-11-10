@@ -93,6 +93,7 @@ export default function SafetyScreen() {
 
       {/* Modal 1: Confirmation Send Safety Alert Dialog with 5s countdown option */}
       <SendSafetyAlertModal
+        key={isSosConfirmOpen ? 'sos-open' : 'sos-closed'}
         isOpen={isSosConfirmOpen}
         isSending={isSendingSos}
         onClose={handleCloseSosConfirm}
@@ -108,6 +109,7 @@ export default function SafetyScreen() {
 
       {/* Modal 3: Edit Contact Modal */}
       <EditContactModal
+        key={editingContact?.id ?? 'no-editing-contact'}
         isOpen={!!editingContact}
         contact={editingContact}
         onClose={handleCancelEdit}

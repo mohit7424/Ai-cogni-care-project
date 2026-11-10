@@ -9,6 +9,24 @@ export interface TrustedContactItem {
   status: 'Verified' | 'Pending';
   avatarUrl?: string;
   initials: string;
+  isPrimary?: boolean;
+  tag?: ContactTag;
+}
+
+export interface EmergencyBannerInfo {
+  heading: string;
+  subheading: string;
+  buttonLabel: string;
+}
+
+export type SafetyFeatureKey = 'location' | 'assistance' | 'alerts';
+
+export interface SafetyFeatureItem {
+  id: SafetyFeatureKey;
+  title: string;
+  description: string;
+  enabled: boolean;
+  iconType: SafetyFeatureKey;
 }
 
 export type AlertStatus = 'Triggered' | 'Resolved' | 'Cancelled';

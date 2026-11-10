@@ -36,25 +36,29 @@ export function useSafety() {
 
   // Restore from LocalStorage on mount without triggering cascading render
   useEffect(() => {
-    try {
-      const savedContacts = localStorage.getItem(STORAGE_CONTACTS_KEY);
-      if (savedContacts) {
-        const parsed = JSON.parse(savedContacts);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setContacts(parsed);
+    const restoreTimer = setTimeout(() => {
+      try {
+        const savedContacts = localStorage.getItem(STORAGE_CONTACTS_KEY);
+        if (savedContacts) {
+          const parsed = JSON.parse(savedContacts);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setContacts(parsed);
+          }
         }
-      }
 
-      const savedAlerts = localStorage.getItem(STORAGE_ALERTS_KEY);
-      if (savedAlerts) {
-        const parsed = JSON.parse(savedAlerts);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setRecentAlerts(parsed);
+        const savedAlerts = localStorage.getItem(STORAGE_ALERTS_KEY);
+        if (savedAlerts) {
+          const parsed = JSON.parse(savedAlerts);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setRecentAlerts(parsed);
+          }
         }
+      } catch {
+        // LocalStorage unavailable, use defaults
       }
-    } catch {
-      // LocalStorage unavailable, use defaults
-    }
+    }, 0);
+
+    return () => clearTimeout(restoreTimer);
   }, []);
 
   // Save to LocalStorage helper

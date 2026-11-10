@@ -61,7 +61,7 @@ export default function TrustedContactsCard({
                         : 'bg-gray-100 text-gray-700'
                     }`}
                   >
-                    {c.tag}
+                    {c.tag ?? c.relationship}
                   </span>
                 </div>
                 <p className="text-xs text-gray-500 mt-0.5">{c.relationship}</p>
@@ -118,4 +118,3 @@ export default function TrustedContactsCard({
     </div>
   );
 }
-
