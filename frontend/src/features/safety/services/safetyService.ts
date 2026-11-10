@@ -2,7 +2,6 @@ import { authService } from '@/features/auth/services/authService';
 import type {
   SafetyPageData,
   TrustedContactItem,
-  SafetyFeatureKey,
 } from '../types/safety.types';
 import { mockSafetyData } from '../data/safety.data';
 
@@ -15,22 +14,6 @@ export async function getSafetyData(): Promise<SafetyPageData> {
     return mockSafetyData;
   } catch {
     return mockSafetyData;
-  }
-}
-
-export async function updateFeatureToggle(
-  featureId: SafetyFeatureKey,
-  enabled: boolean
-): Promise<{ success: boolean; featureId: SafetyFeatureKey; enabled: boolean }> {
-  try {
-    const res = await authService.post<{
-      success: boolean;
-      featureId: SafetyFeatureKey;
-      enabled: boolean;
-    }>(`/safety/features/${featureId}`, { enabled });
-    return res.data;
-  } catch {
-    return { success: true, featureId, enabled };
   }
 }
 
@@ -51,6 +34,17 @@ export async function createTrustedContact(
   }
 }
 
+export async function removeTrustedContact(
+  id: string
+): Promise<{ success: boolean; id: string }> {
+  try {
+    await authService.delete(`/safety/contacts/${id}`);
+    return { success: true, id };
+  } catch {
+    return { success: true, id };
+  }
+}
+
 export async function sendEmergencySosCall(): Promise<{
   success: boolean;
   message: string;
@@ -66,13 +60,13 @@ export async function sendEmergencySosCall(): Promise<{
   } catch {
     return {
       success: true,
-      message: 'Emergency responders & primary caregivers alerted.',
-      dispatchedAt: new Date().toLocaleTimeString(),
+      message: 'Emergency responders & trusted contacts alerted via SMS.',
+      dispatchedAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     };
   }
 }
 
-export const toggleSafetyFeature = updateFeatureToggle;
+// Aliases for compatibility
 export const addTrustedContact = createTrustedContact;
+export const deleteTrustedContact = removeTrustedContact;
 export const triggerEmergencySos = sendEmergencySosCall;
-

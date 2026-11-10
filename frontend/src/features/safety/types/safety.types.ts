@@ -1,40 +1,50 @@
-export type ContactTag = 'Primary' | 'Caregiver' | 'Doctor' | 'Family';
+export type ContactTag = 'Primary' | 'Caregiver' | 'Doctor' | 'Family' | 'Sister' | 'Friend' | 'Parent';
 
 export interface TrustedContactItem {
   id: string;
   name: string;
+  email: string;
   relationship: string;
   phone: string;
-  tag: ContactTag;
-  isPrimary: boolean;
+  status: 'Verified' | 'Pending';
   avatarUrl?: string;
   initials: string;
 }
 
-export type SafetyFeatureKey = 'location-sharing' | 'emergency-assistance' | 'safety-alerts';
+export type AlertStatus = 'Triggered' | 'Resolved' | 'Cancelled';
+export type SmsStatus = 'SMS Sent' | 'Delivered' | 'Failed';
 
-export interface SafetyFeatureItem {
-  id: SafetyFeatureKey;
-  title: string;
-  description: string;
-  enabled: boolean;
-  iconType: 'location' | 'assistance' | 'alerts';
+export interface RecentSafetyAlertItem {
+  id: string;
+  triggeredAt: string;
+  status: AlertStatus;
+  smsStatus: SmsStatus;
+  contactsNotified: string;
+  location?: string;
 }
 
-export interface EmergencyBannerInfo {
-  heading: string;
-  subheading: string;
+export interface HowItWorksStep {
+  stepNumber: number;
+  title: string;
+  description: string;
+  color: 'rose' | 'teal' | 'emerald';
+}
+
+export interface ManualSosBannerInfo {
+  title: string;
+  subtitle: string;
+  statusLabel: string;
   buttonLabel: string;
+  callHelpLabel: string;
+  smsNotice: string;
+  helplinePhone?: string;
 }
 
 export interface SafetyPageData {
   pageTitle: string;
   subtitle: string;
-  contactsHeader: string;
+  manualSos: ManualSosBannerInfo;
   contacts: TrustedContactItem[];
-  featuresHeader: string;
-  features: SafetyFeatureItem[];
-  emergencyBanner: EmergencyBannerInfo;
-  footerNote: string;
+  recentAlerts: RecentSafetyAlertItem[];
+  howItWorks: HowItWorksStep[];
 }
-

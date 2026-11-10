@@ -3,97 +3,123 @@
 import React from 'react';
 import { useSafety } from '../hooks/useSafety';
 import {
-  TrustedContactsCard,
-  SafetyFeaturesCard,
-  EmergencyBannerCard,
+  ManualSosBannerCard,
+  TrustedContactsTableCard,
+  RecentSafetyAlertsCard,
+  HowItWorksCard,
+  SendSafetyAlertModal,
   AddContactModal,
-  EmergencySosModal,
+  EditContactModal,
+  AlertDetailsModal,
 } from '../components';
 
 export default function SafetyScreen() {
   const {
     data,
     contacts,
-    features,
-    allActive,
+    allContactsCount,
+    recentAlerts,
+    searchContactQuery,
+    setSearchContactQuery,
+    isSosConfirmOpen,
     isAddModalOpen,
     setIsAddModalOpen,
-    isSosModalOpen,
-    setIsSosModalOpen,
-    sosStatus,
-    handleToggleFeature,
+    editingContact,
+    selectedAlert,
+    isDetailsModalOpen,
+    isSendingSos,
+    sosSentFeedback,
+    setSosSentFeedback,
+    handleOpenSosConfirm,
+    handleCloseSosConfirm,
+    handleConfirmSendSos,
     handleAddContact,
-    handleCallContact,
-    handleTriggerEmergency,
+    handleStartEditContact,
+    handleSaveEditContact,
+    handleCancelEdit,
+    handleDeleteContact,
+    handleCallForHelp,
+    handleViewDetails,
+    handleCloseDetails,
   } = useSafety();
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto">
-      {/* Top Header matching screenshot */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-1">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0a3832] tracking-tight">
-            {data.pageTitle}
-          </h1>
-          <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
-            {data.subtitle}
-          </p>
-        </div>
-
-        <button
-          type="button"
-          onClick={() => setIsAddModalOpen(true)}
-          className="text-xs font-bold text-[#0d9488] bg-white border border-teal-200/80 hover:bg-teal-50 px-4 py-2 rounded-xl shadow-2xs transition flex items-center gap-1.5 self-start sm:self-auto cursor-pointer"
-        >
-          <span>Manage Contacts</span>
-          <span>&rarr;</span>
-        </button>
-      </div>
-
-      {/* Main 2-Column Grid: Trusted Contacts (Left) + Safety Features (Right) matching screenshot */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-        {/* Left Column: Trusted Contacts Card */}
-        <div className="lg:col-span-6 flex flex-col">
-          <TrustedContactsCard
-            contacts={contacts}
-            onCallContact={handleCallContact}
-            onOpenAddModal={() => setIsAddModalOpen(true)}
-          />
-        </div>
-
-        {/* Right Column: Safety Features Card */}
-        <div className="lg:col-span-6 flex flex-col">
-          <SafetyFeaturesCard
-            features={features}
-            allActive={allActive}
-            onToggleFeature={handleToggleFeature}
-          />
-        </div>
-      </div>
-
-      {/* Bottom Emergency SOS Card matching screenshot */}
+    <div className="space-y-5 sm:space-y-6 max-w-[1500px] mx-auto pb-10 px-1 sm:px-2">
+      {/* Page Title & Subtitle Header */}
       <div>
-        <EmergencyBannerCard
-          banner={data.emergencyBanner}
-          onTriggerSos={handleTriggerEmergency}
-        />
+        <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#0a3832] dark:text-white tracking-tight">
+          {data.pageTitle}
+        </h1>
+        <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-300 mt-1">
+          {data.subtitle}
+        </p>
       </div>
 
-      {/* Add Contact Modal Dialog */}
+      {/* 1. Top Card: Manual SOS Alert Banner with Responsive Layout */}
+      <ManualSosBannerCard
+        info={data.manualSos}
+        onOpenSosModal={handleOpenSosConfirm}
+        onCallForHelp={handleCallForHelp}
+        feedbackMessage={sosSentFeedback}
+        onDismissFeedback={() => setSosSentFeedback(null)}
+      />
+
+      {/* 2. Middle Card: Trusted Contacts (Desktop Table + Mobile Cards + Search & Edit) */}
+      <TrustedContactsTableCard
+        contacts={contacts}
+        allCount={allContactsCount}
+        searchQuery={searchContactQuery}
+        onSearchChange={setSearchContactQuery}
+        onAddContact={() => setIsAddModalOpen(true)}
+        onEditContact={handleStartEditContact}
+        onDeleteContact={handleDeleteContact}
+      />
+
+      {/* 3. Bottom Row: Recent Safety Alerts (Left) + How It Works (Right) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-stretch">
+        {/* Left Column: Recent Safety Alerts Table */}
+        <div className="lg:col-span-8 flex flex-col">
+          <RecentSafetyAlertsCard
+            alerts={recentAlerts}
+            onViewDetails={handleViewDetails}
+          />
+        </div>
+
+        {/* Right Column: How It Works Steps */}
+        <div className="lg:col-span-4 flex flex-col">
+          <HowItWorksCard steps={data.howItWorks} />
+        </div>
+      </div>
+
+      {/* Modal 1: Confirmation Send Safety Alert Dialog with 5s countdown option */}
+      <SendSafetyAlertModal
+        isOpen={isSosConfirmOpen}
+        isSending={isSendingSos}
+        onClose={handleCloseSosConfirm}
+        onConfirm={handleConfirmSendSos}
+      />
+
+      {/* Modal 2: Add Trusted Contact Modal */}
       <AddContactModal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onAdd={handleAddContact}
       />
 
-      {/* Active SOS Response Modal */}
-      <EmergencySosModal
-        isOpen={isSosModalOpen}
-        onClose={() => setIsSosModalOpen(false)}
-        statusMessage={sosStatus}
-        contacts={contacts}
+      {/* Modal 3: Edit Contact Modal */}
+      <EditContactModal
+        isOpen={!!editingContact}
+        contact={editingContact}
+        onClose={handleCancelEdit}
+        onSave={handleSaveEditContact}
+      />
+
+      {/* Modal 4: Alert Details Modal */}
+      <AlertDetailsModal
+        isOpen={isDetailsModalOpen}
+        alertItem={selectedAlert}
+        onClose={handleCloseDetails}
       />
     </div>
   );
 }
-
