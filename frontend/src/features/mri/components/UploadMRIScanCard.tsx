@@ -49,7 +49,7 @@ export default function UploadMRIScanCard({
   }
 
   return (
-    <div className="bg-white rounded-3xl border border-teal-100/80 p-6 sm:p-7 shadow-xs flex flex-col justify-between space-y-5">
+    <div className="bg-white dark:bg-[#0c2b24] rounded-3xl border border-teal-100/80 dark:border-[#154c40] p-4 sm:p-7 shadow-xs flex flex-col justify-between space-y-5 transition-colors duration-200">
       {/* Hidden File Input */}
       <input
         type="file"
@@ -61,11 +61,11 @@ export default function UploadMRIScanCard({
 
       {/* Top Header Row inside Card: Title + DICOM v3 Ready Badge */}
       <div className="flex items-center justify-between">
-        <h3 className="text-sm sm:text-base font-bold text-gray-900 tracking-tight">
+        <h3 className="text-sm sm:text-base font-bold text-gray-900 dark:text-white tracking-tight">
           Upload MRI Scan
         </h3>
 
-        <span className="text-[11px] font-semibold text-gray-500 bg-gray-100 border border-gray-200/80 px-2.5 py-0.5 rounded-md">
+        <span className="text-[11px] font-semibold text-gray-500 dark:text-gray-300 bg-gray-100 dark:bg-[#0f352c] border border-gray-200/80 dark:border-[#19584b] px-2.5 py-0.5 rounded-md">
           {dicomBadge}
         </span>
       </div>
@@ -76,10 +76,10 @@ export default function UploadMRIScanCard({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         onClick={() => fileInputRef.current?.click()}
-        className={`w-full py-10 px-6 rounded-2xl border-2 border-dashed transition-all flex flex-col items-center justify-center text-center cursor-pointer ${
+        className={`w-full py-8 sm:py-10 px-4 sm:px-6 rounded-2xl border-2 border-dashed transition-all flex flex-col items-center justify-center text-center cursor-pointer ${
           isDragging
-            ? 'border-[#0d9488] bg-teal-50/70 scale-[1.01]'
-            : 'border-teal-200/90 bg-[#fbfdfc] hover:bg-[#f3faf7]'
+            ? 'border-[#0d9488] bg-teal-50/70 dark:bg-teal-950/40 scale-[1.01]'
+            : 'border-teal-200/90 dark:border-[#154c40] bg-[#fbfdfc] dark:bg-[#071f1a] hover:bg-[#f3faf7] dark:hover:bg-[#092b23]'
         }`}
       >
         {/* Mint Cloud Upload Icon */}

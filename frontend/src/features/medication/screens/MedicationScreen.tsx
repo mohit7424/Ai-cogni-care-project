@@ -28,10 +28,10 @@ export default function MedicationScreen() {
       {/* Top Page Header matching screenshot */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-1">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0a3832] tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0a3832] dark:text-white tracking-tight">
             {data.pageTitle}
           </h1>
-          <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
+          <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-300 mt-0.5">
             {data.subtitle}
           </p>
         </div>
@@ -39,7 +39,7 @@ export default function MedicationScreen() {
         <button
           type="button"
           onClick={() => setIsAddModalOpen(true)}
-          className="text-xs font-bold text-[#0d9488] bg-white border border-teal-200/80 hover:bg-teal-50 px-4 py-2 rounded-xl shadow-2xs transition flex items-center gap-1.5 self-start sm:self-auto cursor-pointer"
+          className="text-xs font-bold text-[#0d9488] dark:text-[#2dd4bf] bg-white dark:bg-[#0c2b24] border border-teal-200/80 dark:border-[#154c40] hover:bg-teal-50 dark:hover:bg-[#124138] px-4 py-2 rounded-xl shadow-2xs transition flex items-center gap-1.5 self-start sm:self-auto cursor-pointer"
         >
           <span>View All</span>
           <span>&rarr;</span>

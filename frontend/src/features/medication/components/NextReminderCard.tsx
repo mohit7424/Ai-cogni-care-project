@@ -15,13 +15,13 @@ export default function NextReminderCard({
   onMarkAsTaken,
 }: Props) {
   return (
-    <div className="bg-white rounded-3xl border border-teal-100/80 p-6 sm:p-8 shadow-xs flex flex-col justify-between space-y-6">
+    <div className="bg-white dark:bg-[#0c2b24] rounded-3xl border border-teal-100/80 dark:border-[#154c40] p-6 sm:p-8 shadow-xs flex flex-col justify-between space-y-6 transition-colors duration-200">
       <div className="text-center space-y-4">
         {/* Pill / Capsule Icon Area */}
         <div className="py-2 flex justify-center">
-          <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-[#e2f7f1] to-[#c7efe5] flex items-center justify-center shadow-inner">
+          <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-[#e2f7f1] to-[#c7efe5] dark:from-[#0d3b32] dark:to-[#124d41] flex items-center justify-center shadow-inner">
             <svg
-              className="w-10 h-10 text-[#0d9488]"
+              className="w-10 h-10 text-[#0d9488] dark:text-[#2dd4bf]"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -36,22 +36,22 @@ export default function NextReminderCard({
         </div>
 
         {/* Next Reminder Pill Tag */}
-        <span className="inline-block text-[10px] font-extrabold uppercase tracking-widest text-[#0d9488] bg-[#eefaf6] px-3.5 py-1 rounded-full border border-teal-100">
+        <span className="inline-block text-[10px] font-extrabold uppercase tracking-widest text-[#0d9488] dark:text-[#2dd4bf] bg-[#eefaf6] dark:bg-[#071f1a] px-3.5 py-1 rounded-full border border-teal-100 dark:border-[#154c40]">
           NEXT REMINDER
         </span>
 
         {/* Time & Medication Details */}
         <div className="space-y-1">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0a3832] tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0a3832] dark:text-teal-200 tracking-tight">
             {reminder.time}
           </h2>
-          <p className="text-sm font-bold text-gray-700">
+          <p className="text-sm font-bold text-gray-700 dark:text-gray-200">
             {reminder.medicationName}
           </p>
         </div>
 
         {/* Instruction Note with (i) Icon */}
-        <div className="flex items-center justify-center gap-2 p-3 rounded-2xl bg-[#f0faf7] border border-teal-100/70 text-xs text-gray-600 max-w-sm mx-auto">
+        <div className="flex items-center justify-center gap-2 p-3 rounded-2xl bg-[#f0faf7] dark:bg-[#071f1a] border border-teal-100/70 dark:border-[#154c40] text-xs text-gray-600 dark:text-gray-300 max-w-sm mx-auto">
           <span className="w-4 h-4 rounded-full bg-[#0d9488] text-white flex items-center justify-center text-[10px] font-bold shrink-0">
             i
           </span>
@@ -79,7 +79,7 @@ export default function NextReminderCard({
       </div>
 
       {/* Bottom Sub-notice with Clock */}
-      <div className="pt-4 border-t border-gray-100 flex items-center justify-center gap-1.5 text-[11px] text-gray-400 font-medium">
+      <div className="pt-4 border-t border-gray-100 dark:border-[#154c40] flex items-center justify-center gap-1.5 text-[11px] text-gray-400 dark:text-gray-400 font-medium">
         <span>⏱</span>
         <span>Set reminders to stay on track with your medication.</span>
       </div>

@@ -9,12 +9,14 @@ interface NavbarProps {
   userName?: string;
   searchQuery?: string;
   onSearchChange?: (q: string) => void;
+  onToggleMobileSidebar?: () => void;
 }
 
 export default function Navbar({
   userName = 'Alex Parker',
   searchQuery = '',
   onSearchChange,
+  onToggleMobileSidebar,
 }: NavbarProps) {
   const { theme, toggleTheme } = useTheme();
   const pathname = usePathname();
@@ -22,26 +24,43 @@ export default function Navbar({
   const isDark = theme === 'dark';
 
   return (
-    <header className="flex items-center justify-between gap-4 py-3.5 px-6 lg:px-8 bg-white dark:bg-[#09221d] border-b border-gray-100/90 dark:border-[#103a32] shadow-2xs shrink-0 transition-colors duration-200 relative z-30">
-      {/* Search Input Bar */}
-      <div className="relative flex-1 max-w-lg">
-        <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 dark:text-gray-500">
-          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="11" cy="11" r="8" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+    <header className="flex items-center justify-between gap-2.5 sm:gap-4 py-2.5 sm:py-3.5 px-3 sm:px-6 lg:px-8 bg-white dark:bg-[#09221d] border-b border-gray-100/90 dark:border-[#103a32] shadow-2xs shrink-0 transition-colors duration-200 relative z-30">
+      {/* Left: Mobile Hamburger Toggle + Search Bar */}
+      <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0 max-w-xl">
+        {/* Mobile Hamburger Toggle Button (lg:hidden) */}
+        <button
+          type="button"
+          onClick={onToggleMobileSidebar}
+          aria-label="Toggle Navigation Menu"
+          className="lg:hidden p-2 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#124138] transition cursor-pointer shrink-0"
+        >
+          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="18" x2="21" y2="18" />
           </svg>
-        </span>
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={e => onSearchChange?.(e.target.value)}
-          placeholder="Search assessments, medications, scans..."
-          className="w-full pl-10 pr-4 py-2 bg-gray-50/80 dark:bg-[#0d2e27] hover:bg-gray-50 focus:bg-white dark:focus:bg-[#0e352d] border border-gray-200/80 dark:border-[#14483e] focus:border-[#0d9488] rounded-xl text-xs sm:text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none transition focus:ring-2 focus:ring-teal-100 dark:focus:ring-teal-900"
-        />
+        </button>
+
+        {/* Search Input Bar */}
+        <div className="relative flex-1 min-w-0">
+          <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 dark:text-gray-500">
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </span>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={e => onSearchChange?.(e.target.value)}
+            placeholder="Search assessments, medications..."
+            className="w-full pl-9 pr-3 sm:pr-4 py-1.5 sm:py-2 bg-gray-50/80 dark:bg-[#0d2e27] hover:bg-gray-50 focus:bg-white dark:focus:bg-[#0e352d] border border-gray-200/80 dark:border-[#14483e] focus:border-[#0d9488] rounded-xl text-xs sm:text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none transition focus:ring-2 focus:ring-teal-100 dark:focus:ring-teal-900"
+          />
+        </div>
       </div>
 
       {/* Right Actions & Profile */}
-      <div className="flex items-center gap-2.5">
+      <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
         {/* Dark/Light mode toggle button */}
         <button
           type="button"
@@ -49,7 +68,7 @@ export default function Navbar({
           aria-label="Toggle Theme"
           suppressHydrationWarning
           title={`Switch to ${isDark ? 'Light' : 'Dark'} Mode`}
-          className="p-2.5 text-gray-500 dark:text-teal-200 hover:text-teal-700 dark:hover:text-white hover:bg-teal-50 dark:hover:bg-[#124138] rounded-xl transition cursor-pointer flex items-center justify-center"
+          className="p-2 sm:p-2.5 text-gray-500 dark:text-teal-200 hover:text-teal-700 dark:hover:text-white hover:bg-teal-50 dark:hover:bg-[#124138] rounded-xl transition cursor-pointer flex items-center justify-center"
         >
           {isDark ? (
             // Sun Icon for Dark Mode
@@ -76,7 +95,7 @@ export default function Navbar({
         <div className="relative">
           <Link
             href="/dashboard/notifications"
-            className={`relative p-2.5 rounded-xl transition cursor-pointer flex items-center justify-center ${
+            className={`relative p-2 sm:p-2.5 rounded-xl transition cursor-pointer flex items-center justify-center ${
               pathname === '/dashboard/notifications'
                 ? 'bg-teal-50 dark:bg-[#124138] text-[#0d9488]'
                 : 'text-gray-500 dark:text-teal-200 hover:text-teal-700 dark:hover:text-white hover:bg-teal-50 dark:hover:bg-[#124138]'
@@ -96,12 +115,12 @@ export default function Navbar({
           <button
             type="button"
             onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-            className="flex items-center gap-2.5 pl-2.5 pr-2 py-1 rounded-xl hover:bg-teal-50/60 dark:hover:bg-[#124138] border-l border-gray-200 dark:border-[#14483e] transition cursor-pointer"
+            className="flex items-center gap-2 pl-2 pr-1.5 sm:pr-2 py-1 rounded-xl hover:bg-teal-50/60 dark:hover:bg-[#124138] border-l border-gray-200 dark:border-[#14483e] transition cursor-pointer"
           >
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#0e8a7d] to-[#2dd4bf] text-white flex items-center justify-center font-bold text-xs ring-2 ring-teal-100 dark:ring-teal-700">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-tr from-[#0e8a7d] to-[#2dd4bf] text-white flex items-center justify-center font-bold text-xs ring-2 ring-teal-100 dark:ring-teal-700 shrink-0">
               AP
             </div>
-            <span className="text-xs font-semibold text-gray-700 dark:text-gray-200 hidden sm:inline">
+            <span className="text-xs font-semibold text-gray-700 dark:text-gray-200 hidden md:inline truncate max-w-[100px]">
               {userName}
             </span>
             <svg
@@ -139,7 +158,7 @@ export default function Navbar({
                   className="flex items-center gap-2.5 px-4 py-2 text-xs text-gray-700 dark:text-gray-200 hover:bg-teal-50 dark:hover:bg-[#124138] hover:text-[#0d9488]"
                 >
                   <span>🔔</span>
-                  <span>Notification Center</span>
+                  <span>Notifications</span>
                 </Link>
 
                 <Link
@@ -152,23 +171,15 @@ export default function Navbar({
                 </Link>
               </div>
 
-              <div className="pt-1 border-t border-gray-100 dark:border-[#154a3f]">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsProfileMenuOpen(false);
-                    toggleTheme();
-                  }}
-                  className="w-full flex items-center justify-between px-4 py-2 text-xs text-gray-700 dark:text-gray-200 hover:bg-teal-50 dark:hover:bg-[#124138] cursor-pointer"
+              <div className="border-t border-gray-100 dark:border-[#154a3f] pt-1 mt-1">
+                <Link
+                  href="/auth/login"
+                  onClick={() => setIsProfileMenuOpen(false)}
+                  className="flex items-center gap-2.5 px-4 py-2 text-xs text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-[#3f151c]"
                 >
-                  <span className="flex items-center gap-2" suppressHydrationWarning>
-                    <span>{isDark ? '☀️' : '🌙'}</span>
-                    <span>{isDark ? 'Light Mode' : 'Dark Mode'}</span>
-                  </span>
-                  <span className="text-[10px] uppercase font-bold text-[#0d9488]" suppressHydrationWarning>
-                    {isDark ? 'dark' : 'light'}
-                  </span>
-                </button>
+                  <span>🚪</span>
+                  <span>Sign Out</span>
+                </Link>
               </div>
             </div>
           )}

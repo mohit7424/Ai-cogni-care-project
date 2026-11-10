@@ -44,23 +44,23 @@ export default function ProgressChartCard({
         </div>
 
         {/* Bar Chart Visualization */}
-        <div className="pt-8 pb-4">
-          <div className="flex items-end justify-between gap-3 h-40 px-2 border-b border-gray-100 dark:border-[#154c40] pb-2">
+        <div className="pt-6 sm:pt-8 pb-4 overflow-x-auto">
+          <div className="flex items-end justify-between gap-1.5 sm:gap-3 h-36 sm:h-40 px-1 sm:px-2 border-b border-gray-100 dark:border-[#154c40] pb-2 min-w-[280px]">
             {points.map(item => (
-              <div key={item.month} className="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
-                <span className="text-[10px] font-bold text-gray-400 dark:text-gray-400 group-hover:text-teal-700 dark:group-hover:text-teal-300 transition">
+              <div key={item.month} className="flex-1 flex flex-col items-center gap-1.5 sm:gap-2 h-full justify-end group">
+                <span className="text-[9px] sm:text-[10px] font-bold text-gray-400 dark:text-gray-400 group-hover:text-teal-700 dark:group-hover:text-teal-300 transition">
                   {item.score}%
                 </span>
                 <div
                   style={{ height: item.height }}
-                  className={`w-full max-w-[42px] rounded-t-lg transition-all duration-300 ${
+                  className={`w-full max-w-[30px] sm:max-w-[42px] rounded-t-lg transition-all duration-300 ${
                     item.isCurrent
                       ? 'bg-[#14b8a6] shadow-sm shadow-teal-500/20'
                       : 'bg-[#d8f2ee] hover:bg-[#bfeae3] dark:bg-[#124b41] dark:hover:bg-[#186255]'
                   }`}
                 />
                 <span
-                  className={`text-[11px] font-medium pt-1 ${
+                  className={`text-[10px] sm:text-[11px] font-medium pt-1 ${
                     item.isCurrent ? 'font-bold text-gray-800 dark:text-white' : 'text-gray-400 dark:text-gray-400'
                   }`}
                 >

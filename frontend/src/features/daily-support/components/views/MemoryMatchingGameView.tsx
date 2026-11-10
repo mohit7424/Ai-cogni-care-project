@@ -68,19 +68,19 @@ export default function MemoryMatchingGameView({
         </div>
 
         {/* 2-Column Area: Memory Card Board & Right Tips Panel matching Screen 3 */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-6 items-center">
           {/* 3x2 Memory Card Board */}
-          <div className="md:col-span-8 p-6 rounded-3xl bg-[#f8fcfa] border border-teal-100/80">
-            <div className="grid grid-cols-3 gap-4">
+          <div className="md:col-span-8 p-3 sm:p-6 rounded-3xl bg-[#f8fcfa] dark:bg-[#071f1a] border border-teal-100/80 dark:border-[#154c40]">
+            <div className="grid grid-cols-3 gap-2 sm:gap-4">
               {cards.map((c, i) => (
                 <button
                   key={c.id}
                   type="button"
                   onClick={() => handleCardClick(i)}
-                  className={`h-28 rounded-2xl border-2 flex items-center justify-center text-4xl shadow-2xs transition-all duration-200 cursor-pointer ${
+                  className={`h-20 sm:h-28 rounded-2xl border-2 flex items-center justify-center text-2xl sm:text-4xl shadow-2xs transition-all duration-200 cursor-pointer ${
                     c.revealed
-                      ? 'bg-white border-teal-200 shadow-sm'
-                      : 'bg-gradient-to-tr from-[#e8f7f4] to-[#d4f2ec] border-teal-100 text-teal-400 hover:scale-105'
+                      ? 'bg-white dark:bg-[#0c2b24] border-teal-200 dark:border-[#1d5d51] shadow-sm'
+                      : 'bg-gradient-to-tr from-[#e8f7f4] to-[#d4f2ec] dark:from-[#0a2f27] dark:to-[#0f3d33] border-teal-100 dark:border-[#14483e] text-teal-400 hover:scale-105'
                   }`}
                 >
                   {c.revealed ? c.content : '🧠'}

@@ -43,17 +43,17 @@ export default function DailySupportScreen() {
   return (
     <div className="space-y-6">
       {/* Top Interactive Mode & Activity Switcher Strip */}
-      <div className="bg-white rounded-2xl border border-teal-100/90 p-2.5 shadow-2xs space-y-2">
-        <div className="flex items-center justify-between gap-3 flex-wrap">
-          {/* Main Navigation Views */}
-          <div className="flex items-center gap-1.5 min-w-max">
+      <div className="bg-white dark:bg-[#0c2b24] rounded-2xl border border-teal-100/90 dark:border-[#154c40] p-2.5 shadow-2xs space-y-2">
+        <div className="flex items-center justify-between gap-3">
+          {/* Main Navigation Views (Swipeable on mobile) */}
+          <div className="overflow-x-auto pb-1 sm:pb-0 flex items-center gap-1.5 w-full sm:w-auto">
             <button
               type="button"
               onClick={() => setCurrentView('overview')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer whitespace-nowrap ${
                 currentView === 'overview'
                   ? 'bg-[#0d9488] text-white shadow-xs'
-                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#124138] hover:text-gray-900'
               }`}
             >
               Overview & Goals
@@ -62,37 +62,37 @@ export default function DailySupportScreen() {
             <button
               type="button"
               onClick={() => setCurrentView('library')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer whitespace-nowrap ${
                 currentView === 'library'
                   ? 'bg-[#0d9488] text-white shadow-xs'
-                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#124138] hover:text-gray-900'
               }`}
             >
-              Activity Library (6 Activities)
+              Activity Library (6)
             </button>
 
             <button
               type="button"
               onClick={() => setCurrentView('completed')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer whitespace-nowrap ${
                 currentView === 'completed'
                   ? 'bg-[#0d9488] text-white shadow-xs'
-                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#124138] hover:text-gray-900'
               }`}
             >
               Summary Results
             </button>
           </div>
 
-          <span className="text-[11px] text-gray-400 font-medium hidden sm:inline">
-            Active: <strong className="text-teal-800">dailySupport.data.ts</strong>
+          <span className="text-[11px] text-gray-400 font-medium hidden md:inline shrink-0">
+            Active: <strong className="text-teal-800 dark:text-teal-300">dailySupport.data.ts</strong>
           </span>
         </div>
 
         {/* 6 Sub-Activities Switcher Row */}
-        <div className="overflow-x-auto pt-1.5 border-t border-gray-100 flex items-center gap-1.5 min-w-max">
+        <div className="overflow-x-auto pt-1.5 border-t border-gray-100 dark:border-[#154c40] flex items-center gap-1.5">
           <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-2 shrink-0">
-            Play Activity:
+            Play:
           </span>
           {activityTabs.map(tab => {
             const isPlayingThis =

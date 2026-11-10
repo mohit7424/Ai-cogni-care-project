@@ -84,24 +84,41 @@ export const defaultNavItems: NavItem[] = [
   },
   {
     id: 'ct-scan',
-    label: 'CT Scan',
+    label: 'CT Scan Analysis',
     href: '/dashboard/ct-scan',
     icon: (
       <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-        <rect x="3" y="3" width="18" height="18" rx="2" />
-        <circle cx="12" cy="12" r="5" />
-        <line x1="12" y1="3" x2="12" y2="7" />
-        <line x1="12" y1="17" x2="12" y2="21" />
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+        <path d="M2 12h20" />
       </svg>
     ),
   },
   {
     id: 'mri',
-    label: 'MRI',
+    label: 'MRI Analysis',
     href: '/dashboard/mri',
     icon: (
       <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-        <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+        <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18" />
+        <line x1="7" y1="2" x2="7" y2="22" />
+        <line x1="17" y1="2" x2="17" y2="22" />
+        <line x1="2" y1="12" x2="22" y2="12" />
+        <line x1="2" y1="7" x2="7" y2="7" />
+        <line x1="2" y1="17" x2="7" y2="17" />
+        <line x1="17" y1="17" x2="22" y2="17" />
+        <line x1="17" y1="7" x2="22" y2="7" />
+      </svg>
+    ),
+  },
+  {
+    id: 'notifications',
+    label: 'Notifications',
+    href: '/dashboard/notifications',
+    icon: (
+      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
       </svg>
     ),
   },
@@ -125,42 +142,62 @@ interface SidebarProps {
     role: string;
     initials: string;
   };
+  onClose?: () => void;
 }
 
 export default function Sidebar({
   items = defaultNavItems,
   user = { name: 'Alex Parker', role: 'Patient', initials: 'AP' },
+  onClose,
 }: SidebarProps) {
   const pathname = usePathname();
 
   return (
-    <aside className="w-60 bg-[#0a3832] text-white flex flex-col justify-between shrink-0 h-full p-4 border-r border-[#124d45]/40 select-none">
+    <aside className="w-64 sm:w-60 bg-[#0a3832] text-white flex flex-col justify-between shrink-0 h-full p-4 border-r border-[#124d45]/40 select-none overflow-y-auto">
       <div>
-        {/* Logo Brand Header */}
-        <Link href="/dashboard" className="flex items-center gap-2.5 px-3 pt-3 pb-7 group cursor-pointer">
-          <div className="w-9 h-9 rounded-xl bg-[#0e8a7d] group-hover:bg-[#12b3a2] flex items-center justify-center text-white shadow-xs transition">
-            <svg
-              className="w-5 h-5"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+        {/* Logo Brand Header + Mobile Close Button */}
+        <div className="flex items-center justify-between px-2 pt-2 pb-6">
+          <Link
+            href="/dashboard"
+            onClick={onClose}
+            className="flex items-center gap-2.5 group cursor-pointer"
+          >
+            <div className="w-9 h-9 rounded-xl bg-[#0e8a7d] group-hover:bg-[#12b3a2] flex items-center justify-center text-white shadow-xs transition">
+              <svg
+                className="w-5 h-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-5.04z" />
+                <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-5.04z" />
+              </svg>
+            </div>
+            <div>
+              <h1 className="font-bold text-sm tracking-tight text-white leading-tight">
+                Cogni Care
+              </h1>
+              <p className="text-[9px] text-teal-300/80 tracking-wider uppercase font-semibold">
+                CARE. CONNECT. THRIVE.
+              </p>
+            </div>
+          </Link>
+
+          {/* Close button for mobile drawer */}
+          {onClose && (
+            <button
+              type="button"
+              onClick={onClose}
+              className="lg:hidden p-1.5 rounded-lg text-teal-200 hover:text-white hover:bg-[#124d45] transition cursor-pointer"
+              title="Close Navigation"
             >
-              <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-5.04z" />
-              <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-5.04z" />
-            </svg>
-          </div>
-          <div>
-            <h1 className="font-bold text-sm tracking-tight text-white leading-tight">
-              Cogni Care
-            </h1>
-            <p className="text-[9px] text-teal-300/80 tracking-wider uppercase font-semibold">
-              CARE. CONNECT. THRIVE.
-            </p>
-          </div>
-        </Link>
+              ✕
+            </button>
+          )}
+        </div>
 
         {/* Navigation List with Next.js Links */}
         <nav className="space-y-1 px-1">
@@ -170,6 +207,7 @@ export default function Sidebar({
               <Link
                 key={item.id}
                 href={item.href}
+                onClick={onClose}
                 className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium transition cursor-pointer ${
                   isActive
                     ? 'bg-[#124d45] text-white shadow-xs font-semibold'
@@ -187,7 +225,7 @@ export default function Sidebar({
       </div>
 
       {/* Support Message & User Mini Profile Badge (Bottom) */}
-      <div className="space-y-3 pt-3 border-t border-[#134941]/80 px-1">
+      <div className="space-y-3 pt-3 border-t border-[#134941]/80 px-1 mt-6">
         {/* Supportive Health Card from Screenshot */}
         <div className="p-3 rounded-xl bg-[#0d443c]/70 border border-[#14574d]/50 flex items-start gap-2.5">
           <div className="w-6 h-6 rounded-lg bg-teal-500/20 text-teal-300 flex items-center justify-center shrink-0 mt-0.5">
@@ -213,20 +251,21 @@ export default function Sidebar({
 
         <Link
           href="/dashboard/profile"
+          onClick={onClose}
           className="flex items-center justify-between p-2.5 rounded-xl bg-[#0d443c]/70 hover:bg-[#0d443c] transition cursor-pointer"
         >
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-900 font-bold text-xs ring-2 ring-teal-400/40 overflow-hidden">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-900 font-bold text-xs ring-2 ring-teal-400/40 overflow-hidden shrink-0">
               <span className="font-bold">{user.initials}</span>
             </div>
-            <div className="text-left">
-              <p className="text-xs font-semibold text-white leading-tight">
+            <div className="text-left min-w-0">
+              <p className="text-xs font-semibold text-white leading-tight truncate">
                 {user.name}
               </p>
-              <p className="text-[10px] text-teal-300/80">{user.role}</p>
+              <p className="text-[10px] text-teal-300/80 truncate">{user.role}</p>
             </div>
           </div>
-          <svg className="w-3.5 h-3.5 text-teal-300/70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+          <svg className="w-3.5 h-3.5 text-teal-300/70 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
             <polyline points="9 18 15 12 9 6" />
           </svg>
         </Link>

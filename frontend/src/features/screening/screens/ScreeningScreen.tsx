@@ -71,17 +71,17 @@ export default function ScreeningScreen() {
   return (
     <div className="space-y-6">
       {/* Top Suite Mode & Step Navigation Strip */}
-      <div className="bg-white rounded-2xl border border-teal-100/90 p-2.5 shadow-2xs space-y-2">
-        <div className="flex items-center justify-between gap-4 flex-wrap">
+      <div className="bg-white dark:bg-[#0c2b24] rounded-2xl border border-teal-100/90 dark:border-[#154c40] p-2.5 shadow-2xs space-y-2 transition-colors duration-200">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           {/* Flow Mode Switcher */}
-          <div className="flex items-center gap-1.5 bg-gray-100/80 p-1 rounded-xl">
+          <div className="flex items-center gap-1.5 bg-gray-100/80 dark:bg-[#071f1a] p-1 rounded-xl w-full sm:w-auto overflow-x-auto">
             <button
               type="button"
               onClick={() => setSuiteMode('v2')}
-              className={`px-3 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${
+              className={`flex-1 sm:flex-initial px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer whitespace-nowrap text-center ${
                 suiteMode === 'v2'
-                  ? 'bg-white text-[#0d9488] shadow-xs'
-                  : 'text-gray-500 hover:text-gray-900'
+                  ? 'bg-white dark:bg-[#0c2b24] text-[#0d9488] dark:text-[#2dd4bf] shadow-xs'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-900'
               }`}
             >
               V2 Interactive Flow (6 Views)
@@ -89,18 +89,18 @@ export default function ScreeningScreen() {
             <button
               type="button"
               onClick={() => setSuiteMode('subpages')}
-              className={`px-3 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${
+              className={`flex-1 sm:flex-initial px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer whitespace-nowrap text-center ${
                 suiteMode === 'subpages'
-                  ? 'bg-white text-[#0d9488] shadow-xs'
-                  : 'text-gray-500 hover:text-gray-900'
+                  ? 'bg-white dark:bg-[#0c2b24] text-[#0d9488] dark:text-[#2dd4bf] shadow-xs'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-900'
               }`}
             >
               10 Sub-Pages Flow
             </button>
           </div>
 
-          <div className="text-[11px] text-gray-500 font-medium">
-            Active Data: <span className="font-bold text-teal-800">screening.data.ts</span> (V2 + MoCA)
+          <div className="text-[11px] text-gray-500 dark:text-gray-400 font-medium hidden md:inline">
+            Active Data: <span className="font-bold text-teal-800 dark:text-teal-300">screening.data.ts</span> (V2 + MoCA)
           </div>
         </div>
 

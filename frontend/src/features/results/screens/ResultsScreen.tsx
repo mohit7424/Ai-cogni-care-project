@@ -13,20 +13,20 @@ export default function ResultsScreen() {
   if (!data) return null;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-7xl mx-auto">
       {/* Top Title & Timeframe Selector matching screenshot */}
-      <div className="flex items-center justify-between pb-1">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0a3832] dark:text-white tracking-tight">
             Results & Trends
           </h1>
-          <p className="text-xs text-gray-500 mt-0.5">
+          <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-300 mt-0.5">
             Track your progress over time.
           </p>
         </div>
 
         {/* Timeframe Dropdown */}
-        <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 bg-white border border-gray-200 px-3 py-1.5 rounded-xl shadow-2xs cursor-pointer">
+        <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 dark:text-gray-300 bg-white dark:bg-[#0c2b24] border border-gray-200 dark:border-[#154c40] px-3.5 py-2 rounded-xl shadow-2xs self-start sm:self-auto cursor-pointer">
           <span>{timeframe}</span>
           <span className="text-[10px] text-gray-400">▾</span>
         </div>

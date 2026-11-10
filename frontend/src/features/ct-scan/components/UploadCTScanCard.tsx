@@ -47,7 +47,7 @@ export default function UploadCTScanCard({
   }
 
   return (
-    <div className="bg-white rounded-3xl border border-teal-100/80 p-6 sm:p-7 shadow-xs flex flex-col justify-between space-y-6">
+    <div className="bg-white dark:bg-[#0c2b24] rounded-3xl border border-teal-100/80 dark:border-[#154c40] p-4 sm:p-7 shadow-xs flex flex-col justify-between space-y-6 transition-colors duration-200">
       {/* Hidden File Input */}
       <input
         type="file"
@@ -63,16 +63,16 @@ export default function UploadCTScanCard({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         onClick={() => fileInputRef.current?.click()}
-        className={`w-full py-10 px-6 rounded-2xl border-2 border-dashed transition-all flex flex-col items-center justify-center text-center cursor-pointer ${
+        className={`w-full py-8 sm:py-10 px-4 sm:px-6 rounded-2xl border-2 border-dashed transition-all flex flex-col items-center justify-center text-center cursor-pointer ${
           isDragging
-            ? 'border-[#0d9488] bg-teal-50/70 scale-[1.01]'
-            : 'border-teal-200/90 bg-[#fbfdfc] hover:bg-[#f3faf7]'
+            ? 'border-[#0d9488] bg-teal-50/70 dark:bg-teal-950/40 scale-[1.01]'
+            : 'border-teal-200/90 dark:border-[#154c40] bg-[#fbfdfc] dark:bg-[#071f1a] hover:bg-[#f3faf7] dark:hover:bg-[#092b23]'
         }`}
       >
         {/* Cloud Upload Icon */}
-        <div className="w-14 h-14 rounded-2xl bg-[#e6f7f3] text-[#0d9488] flex items-center justify-center mb-3 shadow-inner">
+        <div className="w-12 sm:w-14 h-12 sm:h-14 rounded-2xl bg-[#e6f7f3] dark:bg-[#0e352d] text-[#0d9488] dark:text-[#2dd4bf] flex items-center justify-center mb-3 shadow-inner">
           <svg
-            className="w-7 h-7"
+            className="w-6 sm:w-7 h-6 sm:h-7"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -87,20 +87,20 @@ export default function UploadCTScanCard({
         </div>
 
         {/* Title */}
-        <h3 className="text-base font-bold text-gray-900 tracking-tight">
+        <h3 className="text-base font-bold text-gray-900 dark:text-white tracking-tight">
           Upload CT Scan
         </h3>
 
         {/* Subtitle with clickable browse link */}
-        <p className="text-xs text-gray-500 mt-1">
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
           Drag & drop your file here or{' '}
-          <span className="text-[#0d9488] underline font-semibold">click to browse</span>
+          <span className="text-[#0d9488] dark:text-[#2dd4bf] underline font-semibold">click to browse</span>
         </p>
 
         {/* Supported Formats Tag */}
-        <div className="mt-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50/80 border border-teal-100 text-[10.5px] font-medium text-gray-600">
+        <div className="mt-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50/80 dark:bg-[#0f352c] border border-teal-100 dark:border-[#19584b] text-[10.5px] font-medium text-gray-600 dark:text-gray-300">
           <span>Supported formats:</span>
-          <span className="font-semibold text-gray-700">{supportedFormats.join(', ')}</span>
+          <span className="font-semibold text-gray-700 dark:text-gray-100">{supportedFormats.join(', ')}</span>
         </div>
 
         {/* Uploading Spinner Feedback */}

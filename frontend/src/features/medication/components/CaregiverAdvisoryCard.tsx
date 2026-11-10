@@ -15,19 +15,19 @@ export default function CaregiverAdvisoryCard({
   advisories,
 }: Props) {
   return (
-    <div className="bg-white rounded-3xl border border-teal-100/80 p-6 sm:p-8 shadow-xs space-y-6">
+    <div className="bg-white dark:bg-[#0c2b24] rounded-3xl border border-teal-100/80 dark:border-[#154c40] p-6 sm:p-8 shadow-xs space-y-6 transition-colors duration-200">
       {/* Header with (i) Icon and Doctor Attribution */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-gray-100">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-gray-100 dark:border-[#154c40]">
         <div className="flex items-center gap-2.5">
-          <span className="w-5 h-5 rounded-full bg-teal-50 text-[#0d9488] flex items-center justify-center text-xs font-bold shrink-0">
+          <span className="w-5 h-5 rounded-full bg-teal-50 dark:bg-teal-950/40 text-[#0d9488] dark:text-[#2dd4bf] flex items-center justify-center text-xs font-bold shrink-0">
             i
           </span>
-          <h2 className="text-base sm:text-lg font-bold text-gray-900 tracking-tight">
+          <h2 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white tracking-tight">
             {headerTitle}
           </h2>
         </div>
 
-        <p className="text-xs text-gray-500 font-medium">
+        <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">
           {attribution}
         </p>
       </div>
@@ -37,12 +37,12 @@ export default function CaregiverAdvisoryCard({
         {advisories.map(adv => (
           <div
             key={adv.id}
-            className="p-5 rounded-2xl bg-[#f8fcfa] border border-teal-100/70 space-y-2 hover:border-teal-200 transition"
+            className="p-5 rounded-2xl bg-[#f8fcfa] dark:bg-[#071f1a] border border-teal-100/70 dark:border-[#154c40] space-y-2 hover:border-teal-200 dark:hover:border-teal-700 transition"
           >
-            <h3 className="text-xs sm:text-sm font-bold text-gray-900">
+            <h3 className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white">
               {adv.title}
             </h3>
-            <p className="text-xs text-gray-600 leading-relaxed">
+            <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
               {adv.content}
             </p>
           </div>
