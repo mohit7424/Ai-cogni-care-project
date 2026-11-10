@@ -14,7 +14,7 @@ export interface NavItem {
 export const defaultNavItems: NavItem[] = [
   {
     id: 'home',
-    label: 'Home',
+    label: 'Dashboard',
     href: '/dashboard',
     icon: (
       <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
@@ -36,28 +36,53 @@ export const defaultNavItems: NavItem[] = [
     ),
   },
   {
+    id: 'assessments',
+    label: 'Assessments',
+    href: '/dashboard/daily-support',
+    icon: (
+      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <polyline points="14 2 14 8 20 8" />
+        <line x1="16" y1="13" x2="8" y2="13" />
+        <line x1="16" y1="17" x2="8" y2="17" />
+        <polyline points="10 9 9 9 8 9" />
+      </svg>
+    ),
+  },
+  {
+    id: 'ai-assistant',
+    label: 'AI Wellness Assistant',
+    href: '/dashboard/ai-assistant',
+    icon: (
+      <svg className="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+        {/* Sparkles / Magic star icon */}
+        <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
+        <path d="M5 3v4" />
+        <path d="M3 5h4" />
+        <path d="M19 17v4" />
+        <path d="M17 19h4" />
+      </svg>
+    ),
+  },
+  {
+    id: 'safety',
+    label: 'Safety & Trusted Contacts',
+    href: '/dashboard/safety',
+    icon: (
+      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+      </svg>
+    ),
+  },
+  {
     id: 'results',
-    label: 'Results',
+    label: 'Reports',
     href: '/dashboard/results',
     icon: (
       <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
         <line x1="18" y1="20" x2="18" y2="10" />
         <line x1="12" y1="20" x2="12" y2="4" />
         <line x1="6" y1="20" x2="6" y2="14" />
-      </svg>
-    ),
-  },
-  {
-    id: 'daily-support',
-    label: 'Daily Support',
-    href: '/dashboard/daily-support',
-    icon: (
-      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-        <line x1="16" y1="2" x2="16" y2="6" />
-        <line x1="8" y1="2" x2="8" y2="6" />
-        <line x1="3" y1="10" x2="21" y2="10" />
-        <path d="m9 16 2 2 4-4" />
       </svg>
     ),
   },
@@ -69,16 +94,6 @@ export const defaultNavItems: NavItem[] = [
       <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
         <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z" />
         <line x1="8.5" y1="8.5" x2="15.5" y2="15.5" />
-      </svg>
-    ),
-  },
-  {
-    id: 'safety',
-    label: 'Safety',
-    href: '/dashboard/safety',
-    icon: (
-      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
       </svg>
     ),
   },
@@ -108,17 +123,6 @@ export const defaultNavItems: NavItem[] = [
         <line x1="2" y1="17" x2="7" y2="17" />
         <line x1="17" y1="17" x2="22" y2="17" />
         <line x1="17" y1="7" x2="22" y2="7" />
-      </svg>
-    ),
-  },
-  {
-    id: 'notifications',
-    label: 'Notifications',
-    href: '/dashboard/notifications',
-    icon: (
-      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
       </svg>
     ),
   },
@@ -224,8 +228,25 @@ export default function Sidebar({
         </nav>
       </div>
 
-      {/* User Mini Profile Badge (Bottom) */}
+      {/* Support Card & User Mini Profile Badge (Bottom) */}
       <div className="space-y-3 pt-3 border-t border-[#134941]/80 px-1 mt-6">
+        {/* Supportive Health Card from Screenshot */}
+        <div className="p-3 rounded-xl bg-[#0d443c]/70 border border-[#14574d]/50 flex items-start gap-2.5">
+          <div className="w-6 h-6 rounded-lg bg-teal-500/20 text-teal-300 flex items-center justify-center shrink-0 mt-0.5">
+            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+          </div>
+          <div>
+            <p className="text-[11px] font-semibold text-teal-100 leading-tight">
+              Your Safety Matters
+            </p>
+            <p className="text-[9.5px] text-teal-300/80 mt-0.5 leading-snug">
+              We&apos;re here to support you whenever you need it.
+            </p>
+          </div>
+        </div>
+
         <Link
           href="/dashboard/profile"
           onClick={onClose}
