@@ -21,13 +21,13 @@ export default function GreetingBanner({
   },
 }: GreetingBannerProps) {
   return (
-    <div className="w-full bg-gradient-to-r from-[#e7f7f4] via-[#edf9f7] to-[#e4f6f3] dark:from-[#0a2923] dark:via-[#0c332b] dark:to-[#0a2923] rounded-2xl border border-teal-100/80 dark:border-[#14483e] p-5 shadow-xs transition-colors duration-200">
+    <div className="greeting-banner-card w-full rounded-2xl border border-teal-100/80 dark:border-[#14483e] p-5 shadow-xs transition-all duration-200">
       <div className="flex items-center justify-between mb-4">
         <div>
           <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white tracking-tight">
             {greeting}, {name}!
           </h2>
-          <p className="text-xs text-teal-800/70 dark:text-teal-300 font-medium mt-0.5">
+          <p className="text-xs text-teal-800/80 dark:text-teal-300 font-medium mt-0.5">
             Take a small step today for a healthier mind.
           </p>
         </div>
@@ -48,10 +48,10 @@ export default function GreetingBanner({
             {stats.overallProgress}%
           </span>
           <div>
-            <p className="text-[10px] uppercase font-bold text-gray-400 dark:text-teal-400/80 tracking-wider">
+            <p className="text-[10px] uppercase font-bold text-gray-500 dark:text-teal-400/80 tracking-wider">
               Overall
             </p>
-            <p className="text-xs font-semibold text-gray-700 dark:text-gray-100">Progress</p>
+            <p className="text-xs font-semibold text-gray-800 dark:text-gray-100">Progress</p>
           </div>
         </div>
 
@@ -61,10 +61,10 @@ export default function GreetingBanner({
             {stats.completedActivities}/{stats.totalActivities}
           </span>
           <div>
-            <p className="text-[10px] uppercase font-bold text-gray-400 dark:text-teal-400/80 tracking-wider">
+            <p className="text-[10px] uppercase font-bold text-gray-500 dark:text-teal-400/80 tracking-wider">
               Activities
             </p>
-            <p className="text-xs font-semibold text-gray-700 dark:text-gray-100">Completed</p>
+            <p className="text-xs font-semibold text-gray-800 dark:text-gray-100">Completed</p>
           </div>
         </div>
 
@@ -74,10 +74,10 @@ export default function GreetingBanner({
             🏆
           </span>
           <div>
-            <p className="text-[10px] uppercase font-bold text-gray-400 dark:text-teal-400/80 tracking-wider">
+            <p className="text-[10px] uppercase font-bold text-gray-500 dark:text-teal-400/80 tracking-wider">
               {stats.trend === 'stable' ? 'Stable' : 'Improving'}
             </p>
-            <p className="text-xs font-semibold text-gray-700 dark:text-gray-100">Trend</p>
+            <p className="text-xs font-semibold text-gray-800 dark:text-gray-100">Trend</p>
           </div>
         </div>
 
@@ -87,10 +87,10 @@ export default function GreetingBanner({
             ✓
           </span>
           <div>
-            <p className="text-[10px] uppercase font-bold text-gray-400 dark:text-teal-400/80 tracking-wider">
+            <p className="text-[10px] uppercase font-bold text-gray-500 dark:text-teal-400/80 tracking-wider">
               {stats.accountStatus === 'active' ? 'Active' : 'Pending'}
             </p>
-            <p className="text-xs font-semibold text-gray-700 dark:text-gray-100">Account</p>
+            <p className="text-xs font-semibold text-gray-800 dark:text-gray-100">Account</p>
           </div>
         </div>
       </div>
