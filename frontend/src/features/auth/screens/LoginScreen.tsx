@@ -11,15 +11,18 @@ import { Button, TextInput, PasswordInput } from '@/components/common';
 export default function LoginScreen() {
   const router = useRouter();
   const { formData, errors, status, handleChange, handleSubmit } = useLogin();
-  const [activeRole, setActiveRole] = React.useState<'patient' | 'doctor'>('patient');
+  const [activeRole, setActiveRole] = React.useState<'patient' | 'doctor' | 'caregiver'>('patient');
 
   const isLoading = status === 'loading';
 
-  function handleRoleChange(role: 'patient' | 'doctor') {
+  function handleRoleChange(role: 'patient' | 'doctor' | 'caregiver') {
     setActiveRole(role);
     if (role === 'doctor') {
       handleChange('email', 'dr.sarah.jenkins@cognicare.com');
       handleChange('password', 'ClinicianPass@2026');
+    } else if (role === 'caregiver') {
+      handleChange('email', 'maya.sharma@example.com');
+      handleChange('password', 'CaregiverPass@2026');
     } else {
       handleChange('email', 'alex.parker@example.com');
       handleChange('password', 'PatientPass@2026');
@@ -31,6 +34,8 @@ export default function LoginScreen() {
     void handleSubmit(() => {
       if (activeRole === 'doctor') {
         router.push('/doctor');
+      } else if (activeRole === 'caregiver') {
+        router.push('/caregiver');
       } else {
         router.push('/dashboard');
       }
@@ -39,6 +44,10 @@ export default function LoginScreen() {
 
   function handleQuickDoctorAccess() {
     router.push('/doctor');
+  }
+
+  function handleQuickCaregiverAccess() {
+    router.push('/caregiver');
   }
 
   return (
@@ -89,6 +98,8 @@ export default function LoginScreen() {
             <p className="text-xs text-gray-500 mt-1">
               {activeRole === 'doctor'
                 ? 'Clinical Provider Login • Verified Doctor Workspace'
+                : activeRole === 'caregiver'
+                ? 'Family Caregiver Login • Support Your Loved One'
                 : 'Sign in to continue your wellness journey'}
             </p>
           </div>
@@ -98,7 +109,7 @@ export default function LoginScreen() {
             <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1.5 text-center sm:text-left">
               Select Your Login Portal:
             </label>
-            <div className="grid grid-cols-2 gap-2 p-1 bg-gray-100 rounded-xl">
+            <div className="grid grid-cols-3 gap-2 p-1 bg-gray-100 rounded-xl">
               <button
                 type="button"
                 onClick={() => handleRoleChange('patient')}
@@ -124,6 +135,19 @@ export default function LoginScreen() {
                 <span>🩺</span>
                 <span>Doctor Workspace</span>
               </button>
+
+              <button
+                type="button"
+                onClick={() => handleRoleChange('caregiver')}
+                className={`py-2 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
+                  activeRole === 'caregiver'
+                    ? 'bg-[#0d9488] text-white shadow-xs'
+                    : 'text-gray-600 hover:text-[#0d9488] bg-teal-50/50 hover:bg-teal-50'
+                }`}
+              >
+                <span>👨‍👩‍👧</span>
+                <span>Caregiver Access</span>
+              </button>
             </div>
 
             {/* Quick 1-Click Access Pill when Doctor is active or highlighted */}
@@ -139,6 +163,23 @@ export default function LoginScreen() {
                   className="px-3 py-1 bg-[#0d9488] hover:bg-[#0b8075] active:scale-95 text-white text-[11px] font-bold rounded-lg shadow-2xs transition cursor-pointer"
                 >
                   Open Doctor Dashboard &rarr;
+                </button>
+              </div>
+            )}
+
+            {/* Quick Caregiver Access Pill */}
+            {activeRole === 'caregiver' && (
+              <div className="mt-2.5 p-2.5 rounded-xl bg-teal-50 border border-teal-200 flex items-center justify-between gap-2 animate-in fade-in">
+                <div className="flex items-center gap-1.5 text-xs text-[#0a3832] font-semibold">
+                  <span>⚡</span>
+                  <span>Maya Sharma (Primary Caregiver)</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleQuickCaregiverAccess}
+                  className="px-3 py-1 bg-[#0d9488] hover:bg-[#0b8075] active:scale-95 text-white text-[11px] font-bold rounded-lg shadow-2xs transition cursor-pointer"
+                >
+                  Open Caregiver Dashboard &rarr;
                 </button>
               </div>
             )}
@@ -201,6 +242,8 @@ export default function LoginScreen() {
             >
               {activeRole === 'doctor'
                 ? 'Sign In to Doctor Workspace →'
+                : activeRole === 'caregiver'
+                ? 'Sign In to Caregiver Portal →'
                 : 'Sign In to Patient Portal →'}
             </Button>
 

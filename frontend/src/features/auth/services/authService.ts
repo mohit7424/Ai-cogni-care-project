@@ -18,16 +18,21 @@ function getDevFallbackData<T>(endpoint: string, body?: unknown): T {
       creds?.email?.includes('doctor') ||
       creds?.email?.includes('sarah') ||
       creds?.email?.includes('clinician');
+    const isCaregiver =
+      creds?.email?.includes('caregiver') ||
+      creds?.email?.includes('maya') ||
+      creds?.email?.includes('sharma');
+    const role = isDoctor ? 'doctor' : isCaregiver ? 'caregiver' : 'patient';
     return {
       token: 'mock-jwt-token-cognicare',
       refreshToken: 'mock-refresh-token',
       expiresIn: 3600,
       user: {
-        id: isDoctor ? 'mock-doc-1' : 'mock-user-1',
+        id: isDoctor ? 'mock-doc-1' : isCaregiver ? 'mock-caregiver-1' : 'mock-user-1',
         email: creds?.email ?? (isDoctor ? 'dr.sarah.jenkins@cognicare.com' : 'demo@cognicare.com'),
-        role: isDoctor ? 'doctor' : 'patient',
-        firstName: isDoctor ? 'Dr. Sarah' : 'Demo',
-        lastName: isDoctor ? 'Jenkins' : 'User',
+        role,
+        firstName: isDoctor ? 'Dr. Sarah' : isCaregiver ? 'Maya' : 'Demo',
+        lastName: isDoctor ? 'Jenkins' : isCaregiver ? 'Sharma' : 'User',
         isEmailVerified: true,
         createdAt: new Date().toISOString(),
       },
