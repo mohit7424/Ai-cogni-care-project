@@ -104,14 +104,14 @@ export default function NewPatientModal({ isOpen, onClose, onRegister }: Props) 
           </div>
 
           <div className="pt-1 border-t border-gray-100 dark:border-[#154c40]">
-            <span className="block font-bold text-teal-800 dark:text-teal-300 mb-2">Primary Caregiver</span>
+            <span className="block font-bold text-teal-800 dark:text-teal-300 mb-2">Emergency / Family Contact</span>
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <input
                   type="text"
                   value={caregiverName}
                   onChange={e => setCaregiverName(e.target.value)}
-                  placeholder="Caregiver Name"
+                  placeholder="Contact Name (e.g. Daughter/Spouse)"
                   className="w-full p-2.5 rounded-xl border border-gray-200 dark:border-[#19584b] bg-white dark:bg-[#0d2e27] text-gray-800 dark:text-white outline-none"
                 />
               </div>
@@ -120,7 +120,7 @@ export default function NewPatientModal({ isOpen, onClose, onRegister }: Props) 
                   type="text"
                   value={caregiverPhone}
                   onChange={e => setCaregiverPhone(e.target.value)}
-                  placeholder="Caregiver Phone"
+                  placeholder="Contact Phone"
                   className="w-full p-2.5 rounded-xl border border-gray-200 dark:border-[#19584b] bg-white dark:bg-[#0d2e27] text-gray-800 dark:text-white outline-none"
                 />
               </div>

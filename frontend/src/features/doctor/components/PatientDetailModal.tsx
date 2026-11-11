@@ -66,7 +66,7 @@ export default function PatientDetailModal({
                   : 'text-gray-500 hover:bg-gray-100 dark:hover:bg-[#124138]'
               }`}
             >
-              {tab === 'medical' ? 'Medical History' : tab === 'caregiver' ? 'Primary Caregiver' : 'Patient Overview'}
+              {tab === 'medical' ? 'Medical History' : tab === 'caregiver' ? 'Emergency Contact' : 'Patient Overview'}
             </button>
           ))}
         </div>
@@ -135,7 +135,7 @@ export default function PatientDetailModal({
           </div>
         )}
 
-        {/* Tab 3: Primary Caregiver */}
+        {/* Tab 3: Emergency / Family Contact */}
         {activeTab === 'caregiver' && (
           <div className="p-4 rounded-2xl bg-gray-50 dark:bg-[#071f1a] border border-gray-100 dark:border-[#154c40] space-y-2 text-xs">
             <h3 className="font-bold text-gray-800 dark:text-white text-sm">
@@ -148,7 +148,7 @@ export default function PatientDetailModal({
               Emergency Contact: <strong>{patient.primaryCaregiver.phone}</strong>
             </p>
             <span className="inline-block mt-2 text-[10.5px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full">
-              ✔ Verified Primary Contact
+              ✔ Verified Family / Emergency Contact
             </span>
           </div>
         )}

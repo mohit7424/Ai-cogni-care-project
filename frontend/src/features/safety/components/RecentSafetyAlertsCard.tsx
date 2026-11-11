@@ -60,106 +60,31 @@ export default function RecentSafetyAlertsCard({
           </div>
         </div>
 
-        {/* 1. Desktop & Tablet Table (sm and up) */}
-        <div className="hidden sm:block overflow-x-auto -mx-6 sm:mx-0">
-          <div className="inline-block min-w-full align-middle">
-            <table className="min-w-full text-left text-xs">
-              <thead>
-                <tr className="border-b border-gray-100 dark:border-[#154c40] text-[10.5px] font-semibold text-gray-400 uppercase tracking-wider">
-                  <th className="py-2.5 px-3">Alert ID</th>
-                  <th className="py-2.5 px-3">Triggered Date &amp; Time</th>
-                  <th className="py-2.5 px-3">Status</th>
-                  <th className="py-2.5 px-3">SMS Status</th>
-                  <th className="py-2.5 px-3 text-center">Contacts Notified</th>
-                  <th className="py-2.5 px-3 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100/70 dark:divide-[#154c40]/70">
-                {filteredAlerts.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="py-6 text-center text-gray-400 text-xs">
-                      No safety alerts found for &quot;{filter}&quot;.
-                    </td>
-                  </tr>
-                ) : (
-                  filteredAlerts.map(item => (
-                    <tr
-                      key={item.id}
-                      className="hover:bg-teal-50/30 dark:hover:bg-[#0e352d]/40 transition"
-                    >
-                      <td className="py-3 px-3 font-mono font-semibold text-gray-800 dark:text-white">
-                        {item.id}
-                      </td>
-
-                      <td className="py-3 px-3 text-gray-600 dark:text-gray-300 font-medium whitespace-nowrap">
-                        {item.triggeredAt}
-                      </td>
-
-                      <td className="py-3 px-3">
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10.5px] font-bold bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 border border-rose-200/70 dark:border-rose-900/50 whitespace-nowrap">
-                          <span>⚠</span>
-                          <span>{item.status}</span>
-                        </span>
-                      </td>
-
-                      <td className="py-3 px-3">
-                        {item.smsStatus === 'Failed' ? (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10.5px] font-bold bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 border border-amber-200/70 dark:border-amber-900/50 whitespace-nowrap">
-                            <span>⚠</span>
-                            <span>{item.smsStatus}</span>
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10.5px] font-bold bg-emerald-50 dark:bg-[#124138] text-emerald-700 dark:text-[#2dd4bf] border border-emerald-200/80 dark:border-[#155c4e] whitespace-nowrap">
-                            <span>✓</span>
-                            <span>{item.smsStatus}</span>
-                          </span>
-                        )}
-                      </td>
-
-                      <td className="py-3 px-3 font-medium text-gray-700 dark:text-gray-300 text-center">
-                        {item.contactsNotified}
-                      </td>
-
-                      <td className="py-3 px-3 text-right">
-                        <button
-                          type="button"
-                          onClick={() => onViewDetails(item)}
-                          className="px-2.5 py-1 rounded-lg border border-gray-200 dark:border-[#19584b] text-gray-600 dark:text-gray-300 hover:text-[#0d9488] dark:hover:text-white hover:border-teal-200 text-[11px] font-semibold transition cursor-pointer whitespace-nowrap"
-                        >
-                          View Details
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+        {/* Alert Cards Grid — all screen sizes */}
+        {filteredAlerts.length === 0 ? (
+          <div className="py-10 text-center text-gray-400 text-xs">
+            No safety alerts found for &quot;{filter}&quot;.
           </div>
-        </div>
-
-        {/* 2. Mobile Responsive Alert Cards (< sm screens) */}
-        <div className="sm:hidden space-y-2.5">
-          {filteredAlerts.length === 0 ? (
-            <div className="py-6 text-center text-gray-400 text-xs">
-              No safety alerts found for &quot;{filter}&quot;.
-            </div>
-          ) : (
-            filteredAlerts.map(item => (
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredAlerts.map(item => (
               <div
                 key={item.id}
-                className="p-3.5 rounded-2xl bg-gray-50/70 dark:bg-[#0f352c] border border-gray-100 dark:border-[#154c40] space-y-2.5"
+                className="p-4 rounded-2xl bg-gray-50/70 dark:bg-[#0f352c] border border-gray-100 dark:border-[#154c40] hover:border-rose-200 dark:hover:border-rose-800/50 hover:shadow-md transition-all space-y-3 flex flex-col justify-between"
               >
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-mono font-bold text-gray-800 dark:text-white">
+                {/* Top: Alert ID + triggered time */}
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-mono text-xs font-bold text-gray-800 dark:text-white">
                     {item.id}
                   </span>
-                  <span className="text-[11px] text-gray-500 dark:text-gray-400">
+                  <span className="text-[10px] text-gray-500 dark:text-gray-400">
                     {item.triggeredAt}
                   </span>
                 </div>
 
+                {/* Status & SMS badges */}
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10.5px] font-bold bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 border border-rose-200/70">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10.5px] font-bold bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 border border-rose-200/70 dark:border-rose-900/50">
                     <span>⚠</span>
                     <span>{item.status}</span>
                   </span>
@@ -170,28 +95,29 @@ export default function RecentSafetyAlertsCard({
                       <span>{item.smsStatus}</span>
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10.5px] font-bold bg-emerald-50 dark:bg-[#124138] text-emerald-700 dark:text-[#2dd4bf] border border-emerald-200/80">
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10.5px] font-bold bg-emerald-50 dark:bg-[#124138] text-emerald-700 dark:text-[#2dd4bf] border border-emerald-200/80 dark:border-[#155c4e]">
                       <span>✓</span>
                       <span>{item.smsStatus}</span>
                     </span>
                   )}
 
-                  <span className="text-[11px] text-gray-500 dark:text-gray-300 ml-auto font-medium">
-                    Notified: {item.contactsNotified}
+                  <span className="text-[10.5px] text-gray-500 dark:text-gray-400 ml-auto font-medium">
+                    👥 {item.contactsNotified} notified
                   </span>
                 </div>
 
+                {/* View Details button */}
                 <button
                   type="button"
                   onClick={() => onViewDetails(item)}
-                  className="w-full py-1.5 rounded-xl border border-gray-200 dark:border-[#19584b] text-gray-700 dark:text-gray-200 text-xs font-semibold hover:bg-white dark:hover:bg-[#0c2b24] transition text-center"
+                  className="w-full py-2 rounded-xl border border-gray-200 dark:border-[#19584b] text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-[#0c2b24] hover:text-[#0d9488] hover:border-teal-200 text-xs font-semibold transition cursor-pointer"
                 >
-                  View Details &rarr;
+                  View Details →
                 </button>
               </div>
-            ))
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

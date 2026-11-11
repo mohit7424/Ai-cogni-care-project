@@ -57,40 +57,40 @@ export default function Sub9ScreeningHistory({
         </div>
       </div>
 
-      {/* Table of Past Sessions matching screenshot */}
-      <div className="overflow-x-auto">
-        <table className="w-full text-left text-xs">
-          <thead>
-            <tr className="border-b border-gray-100 text-gray-400 font-bold uppercase text-[10px] tracking-wider">
-              <th className="py-3 px-4">Date</th>
-              <th className="py-3 px-4">Score</th>
-              <th className="py-3 px-4">Status</th>
-              <th className="py-3 px-4 text-right">Action</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-50">
-            {sessions.map(s => (
-              <tr key={s.id} className="hover:bg-teal-50/30 transition">
-                <td className="py-3.5 px-4 font-semibold text-gray-800">{s.date}</td>
-                <td className="py-3.5 px-4 font-bold text-teal-800">{s.score}</td>
-                <td className="py-3.5 px-4">
-                  <span className={`px-2.5 py-0.5 rounded-full font-bold text-[10px] ${s.statusBg}`}>
-                    {s.status}
-                  </span>
-                </td>
-                <td className="py-3.5 px-4 text-right">
-                  <button
-                    type="button"
-                    onClick={() => handleAction(s.id)}
-                    className="py-1 px-3 bg-white border border-gray-200 hover:border-teal-300 text-gray-700 text-xs font-semibold rounded-lg shadow-2xs transition cursor-pointer"
-                  >
-                    View
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* Session History Cards Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {sessions.map(s => (
+          <div
+            key={s.id}
+            className="p-4 rounded-2xl border border-teal-100/80 bg-[#f8fcfa] hover:border-teal-300 hover:shadow-md transition-all flex flex-col gap-3 group"
+          >
+            {/* Score & Status */}
+            <div className="flex items-start justify-between">
+              <div>
+                <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider block">Score</span>
+                <span className="text-2xl font-black text-teal-800 leading-tight">{s.score}</span>
+              </div>
+              <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full mt-0.5 ${s.statusBg}`}>
+                {s.status}
+              </span>
+            </div>
+
+            {/* Date */}
+            <div>
+              <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider block">Date</span>
+              <span className="text-xs font-semibold text-gray-800">{s.date}</span>
+            </div>
+
+            {/* Action */}
+            <button
+              type="button"
+              onClick={() => handleAction(s.id)}
+              className="w-full py-2 bg-white border border-gray-200 hover:border-teal-400 hover:bg-teal-50 text-gray-700 hover:text-[#0d9488] text-xs font-bold rounded-xl shadow-2xs transition cursor-pointer"
+            >
+              View Session →
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -80,132 +80,20 @@ export default function TrustedContactsTableCard({
         </div>
       </div>
 
-      {/* 1. Desktop & Tablet Table (md and up) */}
-      <div className="hidden md:block overflow-x-auto -mx-6 sm:mx-0">
-        <div className="inline-block min-w-full align-middle">
-          <table className="min-w-full text-left text-xs">
-            <thead>
-              <tr className="border-b border-gray-100 dark:border-[#154c40] text-[11px] font-semibold text-gray-400 dark:text-gray-400 uppercase tracking-wider">
-                <th className="py-3 px-4 sm:px-2">Contact</th>
-                <th className="py-3 px-4">Relationship</th>
-                <th className="py-3 px-4">Phone</th>
-                <th className="py-3 px-4">Status</th>
-                <th className="py-3 px-4 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100/70 dark:divide-[#154c40]/70">
-              {contacts.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="py-8 text-center text-gray-400 text-xs">
-                    No contacts found matching &quot;{searchQuery}&quot;.
-                  </td>
-                </tr>
-              ) : (
-                contacts.map(contact => (
-                  <tr
-                    key={contact.id}
-                    className="hover:bg-teal-50/30 dark:hover:bg-[#0e352d]/40 transition group"
-                  >
-                    {/* Contact Avatar + Name + Email */}
-                    <td className="py-3.5 px-4 sm:px-2">
-                      <div className="flex items-center gap-3">
-                        {contact.avatarUrl ? (
-                          <Image
-                            src={contact.avatarUrl}
-                            alt={contact.name}
-                            width={36}
-                            height={36}
-                            className="w-9 h-9 rounded-full object-cover ring-2 ring-teal-100 dark:ring-teal-800"
-                          />
-                        ) : (
-                          <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-teal-100 to-emerald-200 dark:from-teal-800 dark:to-teal-600 text-teal-800 dark:text-teal-100 flex items-center justify-center font-bold text-xs ring-2 ring-teal-50 dark:ring-teal-900">
-                            {contact.initials}
-                          </div>
-                        )}
-                        <div>
-                          <p className="font-bold text-gray-800 dark:text-white text-xs">
-                            {contact.name}
-                          </p>
-                          <p className="text-[11px] text-gray-400 dark:text-gray-400">
-                            {contact.email}
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-
-                    {/* Relationship */}
-                    <td className="py-3.5 px-4 font-medium text-gray-700 dark:text-gray-200">
-                      {contact.relationship}
-                    </td>
-
-                    {/* Masked Phone with Tap-to-call link */}
-                    <td className="py-3.5 px-4 font-mono font-medium text-gray-700 dark:text-gray-200">
-                      <a
-                        href={`tel:${contact.phone.replace(/[^+\d]/g, '')}`}
-                        className="hover:text-[#0d9488] dark:hover:text-[#2dd4bf] hover:underline"
-                        title="Click to dial"
-                      >
-                        {contact.phone}
-                      </a>
-                    </td>
-
-                    {/* Status: Verified Pill */}
-                    <td className="py-3.5 px-4">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 dark:bg-[#124138] text-emerald-700 dark:text-[#2dd4bf] border border-emerald-200/80 dark:border-[#155c4e]">
-                        <span>✓</span>
-                        <span>{contact.status}</span>
-                      </span>
-                    </td>
-
-                    {/* Actions: Edit & Delete Buttons */}
-                    <td className="py-3.5 px-4 text-right">
-                      <div className="flex items-center justify-end gap-1.5">
-                        <button
-                          type="button"
-                          onClick={() => onEditContact(contact)}
-                          className="p-1.5 rounded-lg text-teal-600 dark:text-teal-300 hover:bg-teal-50 dark:hover:bg-[#14483e] transition cursor-pointer"
-                          title="Edit Contact"
-                        >
-                          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
-                          </svg>
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() => onDeleteContact(contact.id)}
-                          className="p-1.5 rounded-lg text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition cursor-pointer"
-                          title="Delete Contact"
-                        >
-                          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <polyline points="3 6 5 6 21 6" />
-                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                          </svg>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+      {/* Trusted Contacts Cards — all screen sizes */}
+      {contacts.length === 0 ? (
+        <div className="py-10 text-center text-gray-400 text-xs">
+          No contacts found matching &quot;{searchQuery}&quot;.
         </div>
-      </div>
-
-      {/* 2. Mobile Responsive Card List (< md screens) */}
-      <div className="md:hidden space-y-3">
-        {contacts.length === 0 ? (
-          <div className="py-6 text-center text-gray-400 text-xs">
-            No contacts found matching &quot;{searchQuery}&quot;.
-          </div>
-        ) : (
-          contacts.map(contact => (
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {contacts.map(contact => (
             <div
               key={contact.id}
-              className="p-4 rounded-2xl bg-gray-50/60 dark:bg-[#0f352c] border border-gray-100 dark:border-[#154c40] space-y-3"
+              className="p-4 rounded-2xl bg-gray-50/60 dark:bg-[#0f352c] border border-gray-100 dark:border-[#154c40] hover:border-teal-300 dark:hover:border-teal-600/50 hover:shadow-md transition-all space-y-3 flex flex-col justify-between"
             >
-              {/* Top Row: Avatar + Name + Email + Actions */}
-              <div className="flex items-center justify-between gap-3">
+              {/* Top: Avatar + Name + Email + action buttons */}
+              <div className="flex items-start justify-between gap-2">
                 <div className="flex items-center gap-3 min-w-0">
                   {contact.avatarUrl ? (
                     <Image
@@ -216,17 +104,13 @@ export default function TrustedContactsTableCard({
                       className="w-10 h-10 rounded-full object-cover shrink-0 ring-2 ring-teal-100 dark:ring-teal-800"
                     />
                   ) : (
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-teal-100 to-emerald-200 dark:from-teal-800 dark:to-teal-600 text-teal-800 dark:text-teal-100 flex items-center justify-center font-bold text-xs shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-teal-100 to-emerald-200 dark:from-teal-800 dark:to-teal-600 text-teal-800 dark:text-teal-100 flex items-center justify-center font-bold text-xs shrink-0 ring-2 ring-teal-50 dark:ring-teal-900">
                       {contact.initials}
                     </div>
                   )}
                   <div className="min-w-0">
-                    <p className="font-bold text-gray-800 dark:text-white text-xs truncate">
-                      {contact.name}
-                    </p>
-                    <p className="text-[11px] text-gray-400 dark:text-gray-400 truncate">
-                      {contact.email}
-                    </p>
+                    <p className="font-bold text-gray-800 dark:text-white text-sm truncate">{contact.name}</p>
+                    <p className="text-[11px] text-gray-400 dark:text-gray-400 truncate">{contact.email}</p>
                   </div>
                 </div>
 
@@ -235,18 +119,17 @@ export default function TrustedContactsTableCard({
                   <button
                     type="button"
                     onClick={() => onEditContact(contact)}
-                    className="p-2 rounded-xl text-teal-600 dark:text-teal-300 hover:bg-teal-50 dark:hover:bg-[#14483e] transition"
+                    className="p-1.5 rounded-xl text-teal-600 dark:text-teal-300 hover:bg-teal-50 dark:hover:bg-[#14483e] transition cursor-pointer"
                     title="Edit Contact"
                   >
                     <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
                     </svg>
                   </button>
-
                   <button
                     type="button"
                     onClick={() => onDeleteContact(contact.id)}
-                    className="p-2 rounded-xl text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition"
+                    className="p-1.5 rounded-xl text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition cursor-pointer"
                     title="Delete Contact"
                   >
                     <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -257,30 +140,29 @@ export default function TrustedContactsTableCard({
                 </div>
               </div>
 
-              {/* Middle Row: Relationship Tag & Verified Badge */}
-              <div className="flex items-center justify-between text-xs pt-1 border-t border-gray-100 dark:border-[#154c40]/60">
-                <span className="text-gray-500 dark:text-gray-300 font-medium">
-                  Relationship: <strong className="text-gray-800 dark:text-white">{contact.relationship}</strong>
+              {/* Relationship + Status */}
+              <div className="flex items-center justify-between pt-2 border-t border-gray-100 dark:border-[#154c40]/60 text-xs">
+                <span className="text-gray-600 dark:text-gray-300 font-medium">
+                  <strong className="text-gray-800 dark:text-white">{contact.relationship}</strong>
                 </span>
-
                 <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10.5px] font-bold bg-emerald-50 dark:bg-[#124138] text-emerald-700 dark:text-[#2dd4bf] border border-emerald-200/80 dark:border-[#155c4e]">
                   <span>✓</span>
                   <span>{contact.status}</span>
                 </span>
               </div>
 
-              {/* Bottom Row: Phone with Tap-To-Call */}
+              {/* Tap-to-call phone */}
               <a
                 href={`tel:${contact.phone.replace(/[^+\d]/g, '')}`}
-                className="w-full py-2 px-3 rounded-xl bg-white dark:bg-[#0c2b24] border border-teal-100 dark:border-[#154c40] flex items-center justify-between font-mono text-xs text-gray-700 dark:text-gray-200 active:bg-teal-50"
+                className="w-full py-2 px-3 rounded-xl bg-white dark:bg-[#0c2b24] border border-teal-100 dark:border-[#154c40] flex items-center justify-between font-mono text-xs text-gray-700 dark:text-gray-200 hover:border-teal-300 hover:bg-teal-50/40 transition"
               >
                 <span>📞 {contact.phone}</span>
-                <span className="text-[11px] font-bold text-[#0d9488] dark:text-[#2dd4bf]">Tap to Call &rarr;</span>
+                <span className="text-[11px] font-bold text-[#0d9488] dark:text-[#2dd4bf]">Tap to Call →</span>
               </a>
             </div>
-          ))
-        )}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
