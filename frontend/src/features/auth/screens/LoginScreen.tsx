@@ -11,14 +11,34 @@ import { Button, TextInput, PasswordInput } from '@/components/common';
 export default function LoginScreen() {
   const router = useRouter();
   const { formData, errors, status, handleChange, handleSubmit } = useLogin();
+  const [activeRole, setActiveRole] = React.useState<'patient' | 'doctor'>('patient');
 
   const isLoading = status === 'loading';
+
+  function handleRoleChange(role: 'patient' | 'doctor') {
+    setActiveRole(role);
+    if (role === 'doctor') {
+      handleChange('email', 'dr.sarah.jenkins@cognicare.com');
+      handleChange('password', 'ClinicianPass@2026');
+    } else {
+      handleChange('email', 'alex.parker@example.com');
+      handleChange('password', 'PatientPass@2026');
+    }
+  }
 
   function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     void handleSubmit(() => {
-      router.push('/dashboard');
+      if (activeRole === 'doctor') {
+        router.push('/doctor');
+      } else {
+        router.push('/dashboard');
+      }
     });
+  }
+
+  function handleQuickDoctorAccess() {
+    router.push('/doctor');
   }
 
   return (
@@ -62,13 +82,66 @@ export default function LoginScreen() {
 
         {/* Card Body */}
         <div className="bg-[#f8fcfa] rounded-2xl border border-teal-100/70 p-6 sm:p-7 shadow-xs">
-          <div className="text-center mb-5">
+          <div className="text-center mb-4">
             <h2 className="text-xl font-bold text-gray-800">
               Welcome <span className="text-[#0d9488]">Back</span>
             </h2>
             <p className="text-xs text-gray-500 mt-1">
-              Sign in to continue your wellness journey
+              {activeRole === 'doctor'
+                ? 'Clinical Provider Login • Verified Doctor Workspace'
+                : 'Sign in to continue your wellness journey'}
             </p>
+          </div>
+
+          {/* Role Selection Switcher */}
+          <div className="mb-4">
+            <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1.5 text-center sm:text-left">
+              Select Your Login Portal:
+            </label>
+            <div className="grid grid-cols-2 gap-2 p-1 bg-gray-100 rounded-xl">
+              <button
+                type="button"
+                onClick={() => handleRoleChange('patient')}
+                className={`py-2 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
+                  activeRole === 'patient'
+                    ? 'bg-white text-[#0d9488] shadow-xs'
+                    : 'text-gray-500 hover:text-gray-900'
+                }`}
+              >
+                <span>👤</span>
+                <span>Patient Portal</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleRoleChange('doctor')}
+                className={`py-2 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
+                  activeRole === 'doctor'
+                    ? 'bg-[#0d9488] text-white shadow-xs'
+                    : 'text-gray-600 hover:text-[#0d9488] bg-teal-50/50 hover:bg-teal-50'
+                }`}
+              >
+                <span>🩺</span>
+                <span>Doctor Workspace</span>
+              </button>
+            </div>
+
+            {/* Quick 1-Click Access Pill when Doctor is active or highlighted */}
+            {activeRole === 'doctor' && (
+              <div className="mt-2.5 p-2.5 rounded-xl bg-teal-50 border border-teal-200 flex items-center justify-between gap-2 animate-in fade-in">
+                <div className="flex items-center gap-1.5 text-xs text-[#0a3832] font-semibold">
+                  <span>⚡</span>
+                  <span>Dr. Sarah Jenkins (Neurology)</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleQuickDoctorAccess}
+                  className="px-3 py-1 bg-[#0d9488] hover:bg-[#0b8075] active:scale-95 text-white text-[11px] font-bold rounded-lg shadow-2xs transition cursor-pointer"
+                >
+                  Open Doctor Dashboard &rarr;
+                </button>
+              </div>
+            )}
           </div>
 
           {errors.general && (
@@ -126,7 +199,9 @@ export default function LoginScreen() {
               fullWidth
               variant="primary"
             >
-              Sign In &rarr;
+              {activeRole === 'doctor'
+                ? 'Sign In to Doctor Workspace →'
+                : 'Sign In to Patient Portal →'}
             </Button>
 
             {/* Divider */}

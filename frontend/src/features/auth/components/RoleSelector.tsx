@@ -18,16 +18,10 @@ const ROLES: RoleOption[] = [
     description: 'Seeking mental health support and cognitive care',
   },
   {
-    value: 'therapist',
-    label: 'Therapist',
-    emoji: '👨‍⚕️',
-    description: 'Licensed professional providing therapy and care',
-  },
-  {
-    value: 'admin',
-    label: 'Administrator',
-    emoji: '⚙️',
-    description: 'Managing platform, users, and configurations',
+    value: 'doctor',
+    label: 'Doctor',
+    emoji: '🩺',
+    description: 'Licensed neurologist or clinician providing care',
   },
 ];
 

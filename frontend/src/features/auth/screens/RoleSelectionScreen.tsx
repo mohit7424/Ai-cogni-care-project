@@ -19,7 +19,7 @@ const ROLES: RoleOption[] = [
     value: 'patient',
     label: 'Patient',
     badge: 'Care Seeker',
-    description: 'Track daily wellness, cognitive exercises, and stay connected with care team.',
+    description: 'Track daily wellness, cognitive exercises, and stay connected with your clinician.',
     icon: (
       <svg className="w-5 h-5 text-[#0d9488]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
@@ -28,16 +28,15 @@ const ROLES: RoleOption[] = [
     ),
   },
   {
-    value: 'therapist',
-    label: 'Caregiver / Therapist',
-    badge: 'Provider',
-    description: 'Monitor patient progress, assign cognitive activities, and provide support.',
+    value: 'doctor',
+    label: 'Doctor / Neurologist',
+    badge: 'Clinician Workspace',
+    description: 'Review MMSE screening queues, monitor assigned patients, and sign clinical reports.',
     icon: (
       <svg className="w-5 h-5 text-[#0d9488]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-        <circle cx="9" cy="7" r="4" />
-        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        <path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3" />
+        <path d="M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4" />
+        <circle cx="20" cy="10" r="2" />
       </svg>
     ),
   },
@@ -51,7 +50,11 @@ export default function RoleSelectionScreen() {
   function handleContinue() {
     setIsLoading(true);
     setTimeout(() => {
-      router.push('/dashboard');
+      if (selectedRole === 'doctor') {
+        router.push('/doctor');
+      } else {
+        router.push('/dashboard');
+      }
     }, 600);
   }
 

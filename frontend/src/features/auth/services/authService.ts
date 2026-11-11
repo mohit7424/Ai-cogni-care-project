@@ -13,16 +13,21 @@ interface RequestOptions {
 function getDevFallbackData<T>(endpoint: string, body?: unknown): T {
   if (endpoint.includes('/login')) {
     const creds = body as { email?: string } | undefined;
+    const isDoctor =
+      creds?.email?.includes('dr.') ||
+      creds?.email?.includes('doctor') ||
+      creds?.email?.includes('sarah') ||
+      creds?.email?.includes('clinician');
     return {
       token: 'mock-jwt-token-cognicare',
       refreshToken: 'mock-refresh-token',
       expiresIn: 3600,
       user: {
-        id: 'mock-user-1',
-        email: creds?.email ?? 'demo@cognicare.com',
-        role: 'patient',
-        firstName: 'Demo',
-        lastName: 'User',
+        id: isDoctor ? 'mock-doc-1' : 'mock-user-1',
+        email: creds?.email ?? (isDoctor ? 'dr.sarah.jenkins@cognicare.com' : 'demo@cognicare.com'),
+        role: isDoctor ? 'doctor' : 'patient',
+        firstName: isDoctor ? 'Dr. Sarah' : 'Demo',
+        lastName: isDoctor ? 'Jenkins' : 'User',
         isEmailVerified: true,
         createdAt: new Date().toISOString(),
       },

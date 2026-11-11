@@ -1,4 +1,4 @@
-export type UserRole = 'patient' | 'caregiver' | 'therapist' | 'doctor' | 'admin';
+export type UserRole = 'patient' | 'doctor' | 'admin';
 export type AuthStatus = 'idle' | 'loading' | 'success' | 'error';
 
 export interface AuthState {

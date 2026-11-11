@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import Sidebar from './Sidebar';
+import Sidebar, { NavItem } from './Sidebar';
 import Navbar from './Navbar';
 
 interface DashboardLayoutProps {
@@ -9,6 +9,12 @@ interface DashboardLayoutProps {
   userName?: string;
   searchQuery?: string;
   onSearchChange?: (q: string) => void;
+  navItems?: NavItem[];
+  user?: {
+    name: string;
+    role: string;
+    initials: string;
+  };
 }
 
 export default function DashboardLayout({
@@ -16,6 +22,8 @@ export default function DashboardLayout({
   userName = 'Alex Parker',
   searchQuery,
   onSearchChange,
+  navItems,
+  user,
 }: DashboardLayoutProps) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
@@ -23,7 +31,7 @@ export default function DashboardLayout({
     <div className="h-screen w-screen overflow-hidden flex bg-[#f8fcfa] dark:bg-[#061815] font-sans transition-colors duration-200">
       {/* 1. Desktop Docked Sidebar (Visible on lg and larger screens) */}
       <div className="hidden lg:flex shrink-0 h-full">
-        <Sidebar />
+        <Sidebar items={navItems} user={user} />
       </div>
 
       {/* 2. Mobile & Tablet Off-Canvas Drawer Sidebar */}
@@ -37,7 +45,11 @@ export default function DashboardLayout({
 
           {/* Slide-out Sidebar Drawer */}
           <div className="relative z-10 w-64 h-full shadow-2xl animate-in slide-in-from-left duration-200">
-            <Sidebar onClose={() => setIsMobileSidebarOpen(false)} />
+            <Sidebar
+              items={navItems}
+              user={user}
+              onClose={() => setIsMobileSidebarOpen(false)}
+            />
           </div>
         </div>
       )}
