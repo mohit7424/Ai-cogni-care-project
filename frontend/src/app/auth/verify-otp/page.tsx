@@ -28,8 +28,16 @@ function OTPVerifyContent() {
       email.toLowerCase().includes('doctor') ||
       email.toLowerCase().includes('sarah');
 
+    const isCaregiver =
+      role === 'caregiver' ||
+      email.toLowerCase().includes('caregiver') ||
+      email.toLowerCase().includes('maya') ||
+      email.toLowerCase().includes('sharma');
+
     if (isDoctor) {
       router.push('/doctor');
+    } else if (isCaregiver) {
+      router.push('/caregiver');
     } else {
       router.push('/dashboard');
     }
