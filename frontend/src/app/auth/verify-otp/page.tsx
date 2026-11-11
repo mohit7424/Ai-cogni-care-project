@@ -1,13 +1,15 @@
 'use client';
 
 import { Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import OTPVerificationScreen from '@/features/auth/screens/OTPVerificationScreen';
 import type { OTPPurpose } from '@/features/auth/services/otpService';
 
 function OTPVerifyContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get('email') ?? 'user@cognicare.com';
+  const role = searchParams.get('role');
   const rawPurpose = searchParams.get('purpose');
 
   const purpose: OTPPurpose =
@@ -19,7 +21,27 @@ function OTPVerifyContent() {
       ? 'login'
       : 'email-verification';
 
-  return <OTPVerificationScreen identifier={email} purpose={purpose} />;
+  function handleSuccess() {
+    const isDoctor =
+      role === 'doctor' ||
+      email.toLowerCase().includes('dr.') ||
+      email.toLowerCase().includes('doctor') ||
+      email.toLowerCase().includes('sarah');
+
+    if (isDoctor) {
+      router.push('/doctor');
+    } else {
+      router.push('/dashboard');
+    }
+  }
+
+  return (
+    <OTPVerificationScreen
+      identifier={email}
+      purpose={purpose}
+      onSuccess={handleSuccess}
+    />
+  );
 }
 
 export default function OTPVerifyPage() {
