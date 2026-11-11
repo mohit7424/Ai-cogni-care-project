@@ -530,21 +530,21 @@ CLIENT                        EXPRESS SERVER                  DATABASE/REDIS
 
 ```
 CLIENT              EXPRESS               GOOGLE               DATABASE
-  │                    │                    │                      │
-  │── GET /auth/google─►│                   │                      │
-  │                    │── Passport.js ──────►│                     │
-  │                    │   redirect to       │                      │
-  │                    │   Google OAuth      │                      │
-  │◄── Redirect ────────│                   │                      │
-  │                    │                    │                      │
+  │                     │                    │                     │
+  │── GET /auth/google─►│                   │                     │
+  │                     │── Passport.js ──────►│                     │
+  │                      │   redirect to       │                      │
+  │                      │   Google OAuth      │                      │
+  │◄── Redirect  ────────│                   │                      │
+  │                      │                    │                      │
   │   [User logs in on Google]              │                      │
-  │                    │◄── Callback ────────│                     │
-  │                    │   { googleId,       │                      │
-  │                    │     email,          │                      │
-  │                    │     name, avatar }  │                      │
-  │                    │                    │                      │
-  │                    │── Find or Create user ───────────────────►│
-  │                    │   by google_id/email                      │
+  │                      │◄── Callback ────────│                     │
+  │                      │   { googleId,       │                      │
+  │                      │     email,          │                      │
+  │                      │     name, avatar }  │                      │
+  │                      │                    │                      │
+  │                      │── Find or Create user ───────────────────►│
+  │                       │   by google_id/email                      │
   │                    │                    │                      │
   │                    │── Generate JWT ──────────────────────────►│
   │◄── Redirect to     │                   │                      │

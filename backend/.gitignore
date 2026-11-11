@@ -1,0 +1,91 @@
+# ========================================
+# CogniCare — .gitignore
+# ========================================
+
+# ============ NODE / NPM / PNPM ==========
+node_modules/
+.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# ============ ENVIRONMENT & SECRETS ======
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.env.staging
+*.env
+
+# ============ BUILD OUTPUTS ==============
+dist/
+build/
+out/
+.next/
+.expo/
+
+# ============ TYPESCRIPT =================
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# ============ LOGS =======================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ============ CACHE ======================
+.cache/
+.parcel-cache/
+.turbo/
+.eslintcache
+.stylelintcache
+
+# ============ TESTING ====================
+coverage/
+.nyc_output/
+
+# ============ EDITOR / OS ================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# VS Code
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# JetBrains IDEs
+.idea/
+*.iml
+
+# ============ TEMP FILES =================
+tmp/
+temp/
+*.tmp
+*.swp
+*.swo
+*~
+
+# ============ UPLOADS (runtime) ==========
+uploads/
+public/uploads/
+
+# ============ REACT NATIVE / EXPO ========
+.expo/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+android/
+ios/
