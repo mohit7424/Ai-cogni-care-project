@@ -35,7 +35,7 @@ export default function ResetPasswordScreen({ token }: ResetPasswordScreenProps)
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>
-          <p className="text-xs font-medium">Validating your reset link…</p>
+          <p className="text-xs font-medium">Validating your reset code…</p>
         </div>
       </div>
     );
@@ -54,15 +54,15 @@ export default function ResetPasswordScreen({ token }: ResetPasswordScreenProps)
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
           </div>
-          <h2 className="text-lg font-bold text-gray-800 mb-1.5">Link expired or invalid</h2>
+          <h2 className="text-lg font-bold text-gray-800 mb-1.5">Code expired or invalid</h2>
           <p className="text-xs text-gray-500 mb-6">
-            This password reset link has expired. Please request a new one.
+            This password reset code has expired. Please request a new one.
           </p>
           <Link
             href="/auth/forgot-password"
             className="inline-block w-full py-2.5 px-4 bg-[#0d9488] hover:bg-[#0b8075] text-white text-xs font-semibold rounded-xl transition"
           >
-            Request New Link
+            Request New Code
           </Link>
         </div>
       </div>

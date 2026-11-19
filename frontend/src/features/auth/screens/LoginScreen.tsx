@@ -8,12 +8,27 @@ import { useLogin } from '../hooks/useLogin';
 import { initiateGoogleSignIn } from '../services/socialAuthService';
 import { Button, TextInput, PasswordInput } from '@/components/common';
 
+const emptySubscribe = () => () => {};
+
 export default function LoginScreen() {
   const router = useRouter();
   const { formData, errors, status, handleChange, handleSubmit } = useLogin();
   const [activeRole, setActiveRole] = React.useState<'patient' | 'doctor' | 'caregiver'>('patient');
+  const mounted = React.useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
 
   const isLoading = status === 'loading';
+
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-[#ecf7f5] flex items-center justify-center p-4">
+        <div className="w-8 h-8 border-4 border-[#0d9488] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   function handleRoleChange(role: 'patient' | 'doctor' | 'caregiver') {
     setActiveRole(role);
@@ -109,9 +124,10 @@ export default function LoginScreen() {
             <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1.5 text-center sm:text-left">
               Select Your Login Portal:
             </label>
-            <div className="grid grid-cols-3 gap-2 p-1 bg-gray-100 rounded-xl">
+            <div className="grid grid-cols-3 gap-2 p-1 bg-gray-100 rounded-xl" suppressHydrationWarning>
               <button
                 type="button"
+                suppressHydrationWarning
                 onClick={() => handleRoleChange('patient')}
                 className={`py-2 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
                   activeRole === 'patient'
@@ -125,6 +141,7 @@ export default function LoginScreen() {
 
               <button
                 type="button"
+                suppressHydrationWarning
                 onClick={() => handleRoleChange('doctor')}
                 className={`py-2 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
                   activeRole === 'doctor'
@@ -138,6 +155,7 @@ export default function LoginScreen() {
 
               <button
                 type="button"
+                suppressHydrationWarning
                 onClick={() => handleRoleChange('caregiver')}
                 className={`py-2 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
                   activeRole === 'caregiver'
