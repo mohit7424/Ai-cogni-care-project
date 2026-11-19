@@ -4,13 +4,15 @@ export interface ValidationResult {
 }
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^])[A-Za-z\d@$!%*?&#^]{8,}$/;
+// Match frontend password rule: at least 8 characters, at least 1 uppercase letter, at least 1 number
+const PASSWORD_REGEX = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
 const OTP_REGEX = /^\d{6}$/;
 
 export function validateRegister(data: any): ValidationResult {
   const errors: Record<string, string> = {};
 
-  if (!data?.email || typeof data.email !== 'string' || !EMAIL_REGEX.test(data.email.trim())) {
+  const email = data?.email || data?.identifier;
+  if (!email || typeof email !== 'string' || !EMAIL_REGEX.test(email.trim())) {
     errors.email = 'Please provide a valid email address';
   }
 
@@ -18,7 +20,7 @@ export function validateRegister(data: any): ValidationResult {
     errors.password = 'Password is required';
   } else if (!PASSWORD_REGEX.test(data.password)) {
     errors.password =
-      'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character';
+      'Password must be at least 8 characters long and contain at least one uppercase letter and one number';
   }
 
   if (!data?.firstName || typeof data.firstName !== 'string' || data.firstName.trim().length < 2) {
@@ -43,7 +45,8 @@ export function validateRegister(data: any): ValidationResult {
 export function validateLogin(data: any): ValidationResult {
   const errors: Record<string, string> = {};
 
-  if (!data?.email || typeof data.email !== 'string' || !EMAIL_REGEX.test(data.email.trim())) {
+  const email = data?.email || data?.identifier;
+  if (!email || typeof email !== 'string' || !EMAIL_REGEX.test(email.trim())) {
     errors.email = 'Please provide a valid email address';
   }
 
@@ -60,11 +63,11 @@ export function validateLogin(data: any): ValidationResult {
 export function validateVerifyOtp(data: any): ValidationResult {
   const errors: Record<string, string> = {};
 
-  if (!data?.email || typeof data.email !== 'string' || !EMAIL_REGEX.test(data.email.trim())) {
+  const email = data?.email || data?.identifier;
+  if (!email || typeof email !== 'string' || !EMAIL_REGEX.test(email.trim())) {
     errors.email = 'Please provide a valid email address';
   }
 
-  // Frontend might send 'otp' or 'token'
   const otpCode = data?.otp || data?.token;
   if (!otpCode || typeof otpCode !== 'string' || !OTP_REGEX.test(otpCode.trim())) {
     errors.otp = 'Verification code must be exactly 6 digits';
@@ -79,7 +82,8 @@ export function validateVerifyOtp(data: any): ValidationResult {
 export function validateResendOtp(data: any): ValidationResult {
   const errors: Record<string, string> = {};
 
-  if (!data?.email || typeof data.email !== 'string' || !EMAIL_REGEX.test(data.email.trim())) {
+  const email = data?.email || data?.identifier;
+  if (!email || typeof email !== 'string' || !EMAIL_REGEX.test(email.trim())) {
     errors.email = 'Please provide a valid email address';
   }
 
@@ -92,7 +96,8 @@ export function validateResendOtp(data: any): ValidationResult {
 export function validateForgotPassword(data: any): ValidationResult {
   const errors: Record<string, string> = {};
 
-  if (!data?.email || typeof data.email !== 'string' || !EMAIL_REGEX.test(data.email.trim())) {
+  const email = data?.email || data?.identifier;
+  if (!email || typeof email !== 'string' || !EMAIL_REGEX.test(email.trim())) {
     errors.email = 'Please provide a valid email address';
   }
 
@@ -115,11 +120,7 @@ export function validateResetPassword(data: any): ValidationResult {
     errors.newPassword = 'New password is required';
   } else if (!PASSWORD_REGEX.test(password)) {
     errors.newPassword =
-      'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character';
-  }
-
-  if (data?.confirmPassword !== undefined && data?.confirmPassword !== password) {
-    errors.confirmPassword = 'Passwords do not match';
+      'Password must be at least 8 characters long and contain at least one uppercase letter and one number';
   }
 
   return {
@@ -139,11 +140,7 @@ export function validateChangePassword(data: any): ValidationResult {
     errors.newPassword = 'New password is required';
   } else if (!PASSWORD_REGEX.test(data.newPassword)) {
     errors.newPassword =
-      'New password must be at least 8 characters with uppercase, lowercase, number, and special character';
-  }
-
-  if (data?.confirmPassword !== undefined && data?.confirmPassword !== data?.newPassword) {
-    errors.confirmPassword = 'Passwords do not match';
+      'New password must be at least 8 characters long and contain at least one uppercase letter and one number';
   }
 
   return {
@@ -151,4 +148,3 @@ export function validateChangePassword(data: any): ValidationResult {
     errors,
   };
 }
-

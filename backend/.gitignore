@@ -1,34 +1,26 @@
 # ========================================
-# CogniCare — .gitignore
+# CogniCare Backend — .gitignore
 # ========================================
 
-# ============ NODE / NPM / PNPM ==========
+# Dependencies
 node_modules/
-.pnp
-.pnp.js
-.yarn/install-state.gz
+.pnpm-store/
 
-# ============ ENVIRONMENT & SECRETS ======
+# Environment Variables & Secrets
 .env
-.env.local
-.env.development
-.env.test
-.env.production
-.env.staging
-*.env
+.env.*
+!.env.example
+*.local
 
-# ============ BUILD OUTPUTS ==============
+# Production Build Outputs
 dist/
 build/
-out/
-.next/
-.expo/
 
-# ============ TYPESCRIPT =================
+# TypeScript Cache
 *.tsbuildinfo
 tsconfig.tsbuildinfo
 
-# ============ LOGS =======================
+# Logs & Debugging
 logs/
 *.log
 npm-debug.log*
@@ -36,56 +28,27 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# ============ CACHE ======================
-.cache/
-.parcel-cache/
-.turbo/
-.eslintcache
-.stylelintcache
-
-# ============ TESTING ====================
+# Testing & Coverage
 coverage/
 .nyc_output/
 
-# ============ EDITOR / OS ================
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-desktop.ini
-
-# VS Code
-.vscode/
-!.vscode/extensions.json
-!.vscode/settings.json
-
-# JetBrains IDEs
-.idea/
-*.iml
-
-# ============ TEMP FILES =================
+# Runtime Uploads & Temp Storage
+uploads/
 tmp/
 temp/
 *.tmp
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# IDE & Editor Configs
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
 *.swp
 *.swo
 *~
-
-# ============ UPLOADS (runtime) ==========
-uploads/
-public/uploads/
-
-# ============ REACT NATIVE / EXPO ========
-.expo/
-*.jks
-*.p8
-*.p12
-*.key
-*.mobileprovision
-*.orig.*
-web-build/
-android/
-ios/

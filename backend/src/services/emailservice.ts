@@ -1,4 +1,4 @@
-import { transporter, mailConfig } from '../config/mail.js';
+import { getTransporter, mailConfig } from '../config/mail.js';
 
 export class EmailService {
   /**
@@ -34,27 +34,29 @@ export class EmailService {
       </div>
     `;
 
-    // In dev mode or if SMTP is not configured, always log to console
+    // Always log to console for development and instant inspection
     console.log(`\n======================================================`);
-    console.log(`[EmailService] To: ${to} | Purpose: ${purpose}`);
+    console.log(`[EmailService] Dispatched to: ${to} | Purpose: ${purpose}`);
     console.log(`[EmailService] OTP Code: >>> ${otp} <<<`);
     console.log(`======================================================\n`);
 
     if (!mailConfig.isConfigured) {
+      console.log(`[EmailService] (Notice: SMTP credentials not loaded in current process. OTP logged in console above)`);
       return true;
     }
 
     try {
-      await transporter.sendMail({
+      const transporter = getTransporter();
+      const info = await transporter.sendMail({
         from: mailConfig.from,
         to,
         subject,
         html: htmlContent,
       });
+      console.log(`[EmailService] ✅ Email delivered via SMTP! MessageId: ${info.messageId}`);
       return true;
-    } catch (error) {
-      console.error('[EmailService] Failed to send email via SMTP:', error);
-      // Return true in development so registration flow isn't blocked by mail failure
+    } catch (error: any) {
+      console.error(`[EmailService] ❌ Failed to send email via SMTP (${error.message}). Code is still valid: ${otp}`);
       return true;
     }
   }
@@ -63,25 +65,26 @@ export class EmailService {
    * Send a welcome email after successful verification
    */
   static async sendWelcomeEmail(to: string, name: string): Promise<boolean> {
-    console.log(`[EmailService] Welcome email sent to: ${to} (${name})`);
+    console.log(`[EmailService] Welcome email queued for: ${to} (${name})`);
     if (!mailConfig.isConfigured) return true;
 
     try {
+      const transporter = getTransporter();
       await transporter.sendMail({
         from: mailConfig.from,
         to,
         subject: 'Welcome to CogniCare!',
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 24px;">
-            <h2 style="color: #0f766e;">Welcome, ${name}!</h2>
-            <p>Your CogniCare account is now fully active. You can start monitoring cognitive health and accessing diagnostics right away.</p>
+            <h2 style="color: #0f766e;">Welcome to CogniCare, ${name}!</h2>
+            <p>Your CogniCare account is now fully active. You can now access your cognitive health assessment dashboard.</p>
           </div>
         `,
       });
       return true;
-    } catch {
+    } catch (error: any) {
+      console.error(`[EmailService] ❌ Failed to send welcome email via SMTP: ${error.message}`);
       return true;
     }
   }
 }
-

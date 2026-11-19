@@ -7,6 +7,7 @@ import {
   validateResendOtp,
   validateForgotPassword,
   validateResetPassword,
+  validateChangePassword,
 } from '../validation/authvalidation.js';
 
 const COOKIE_OPTIONS = {
@@ -24,7 +25,7 @@ export class AuthController {
       if (!validation.isValid) {
         res.status(400).json({
           success: false,
-          message: 'Validation failed',
+          message: Object.values(validation.errors)[0] || 'Validation failed',
           errors: validation.errors,
         });
         return;
@@ -48,17 +49,22 @@ export class AuthController {
   // ================= VERIFY OTP =================
   static async verifyOtp(req: Request, res: Response): Promise<void> {
     try {
-      const validation = validateVerifyOtp(req.body);
+      const email = req.body.email || req.body.identifier;
+      const otp = req.body.otp || req.body.token;
+      const purpose = req.body.purpose;
+
+      const payload = { ...req.body, email, otp, purpose };
+      const validation = validateVerifyOtp(payload);
       if (!validation.isValid) {
         res.status(400).json({
           success: false,
-          message: 'Validation failed',
+          message: Object.values(validation.errors)[0] || 'Validation failed',
           errors: validation.errors,
         });
         return;
       }
 
-      const result = await AuthService.verifyOtp(req.body);
+      const result = await AuthService.verifyOtp(payload);
 
       if (result.refreshToken) {
         res.cookie('refreshToken', result.refreshToken, COOKIE_OPTIONS);
@@ -77,20 +83,24 @@ export class AuthController {
     }
   }
 
-  // ================= RESEND OTP =================
+  // ================= RESEND OTP / SEND OTP =================
   static async resendOtp(req: Request, res: Response): Promise<void> {
     try {
-      const validation = validateResendOtp(req.body);
+      const email = req.body.email || req.body.identifier;
+      const purpose = req.body.purpose;
+
+      const payload = { ...req.body, email, purpose };
+      const validation = validateResendOtp(payload);
       if (!validation.isValid) {
         res.status(400).json({
           success: false,
-          message: 'Validation failed',
+          message: Object.values(validation.errors)[0] || 'Validation failed',
           errors: validation.errors,
         });
         return;
       }
 
-      const result = await AuthService.resendOtp(req.body);
+      const result = await AuthService.resendOtp(payload);
 
       res.status(200).json({
         success: true,
@@ -112,7 +122,7 @@ export class AuthController {
       if (!validation.isValid) {
         res.status(400).json({
           success: false,
-          message: 'Validation failed',
+          message: Object.values(validation.errors)[0] || 'Validation failed',
           errors: validation.errors,
         });
         return;
@@ -200,21 +210,25 @@ export class AuthController {
   // ================= FORGOT PASSWORD =================
   static async forgotPassword(req: Request, res: Response): Promise<void> {
     try {
-      const validation = validateForgotPassword(req.body);
+      const email = req.body.email || req.body.identifier;
+      const payload = { ...req.body, email };
+
+      const validation = validateForgotPassword(payload);
       if (!validation.isValid) {
         res.status(400).json({
           success: false,
-          message: 'Validation failed',
+          message: Object.values(validation.errors)[0] || 'Validation failed',
           errors: validation.errors,
         });
         return;
       }
 
-      const result = await AuthService.forgotPassword(req.body);
+      const result = await AuthService.forgotPassword(payload);
 
       res.status(200).json({
         success: true,
         message: result.message,
+        data: result,
       });
     } catch (error: any) {
       res.status(500).json({
@@ -227,7 +241,11 @@ export class AuthController {
   // ================= VALIDATE RESET TOKEN =================
   static async validateResetToken(req: Request, res: Response): Promise<void> {
     try {
-      const token = (req.query.token as string) || (req.params.token as string);
+      const token =
+        (req.body?.token as string) ||
+        (req.query?.token as string) ||
+        (req.params?.token as string);
+
       if (!token) {
         res.status(400).json({
           success: false,
@@ -257,7 +275,7 @@ export class AuthController {
       if (!validation.isValid) {
         res.status(400).json({
           success: false,
-          message: 'Validation failed',
+          message: Object.values(validation.errors)[0] || 'Validation failed',
           errors: validation.errors,
         });
         return;
@@ -268,11 +286,48 @@ export class AuthController {
       res.status(200).json({
         success: true,
         message: result.message,
+        data: result,
       });
     } catch (error: any) {
       res.status(400).json({
         success: false,
         message: error.message || 'Password reset failed',
+      });
+    }
+  }
+
+  // ================= CHANGE PASSWORD =================
+  static async changePassword(req: Request, res: Response): Promise<void> {
+    try {
+      const userId = (req as any).user?.userId;
+      if (!userId) {
+        res.status(401).json({
+          success: false,
+          message: 'Unauthorized',
+        });
+        return;
+      }
+
+      const validation = validateChangePassword(req.body);
+      if (!validation.isValid) {
+        res.status(400).json({
+          success: false,
+          message: Object.values(validation.errors)[0] || 'Validation failed',
+          errors: validation.errors,
+        });
+        return;
+      }
+
+      const result = await AuthService.changePassword(userId, req.body);
+
+      res.status(200).json({
+        success: true,
+        message: result.message,
+      });
+    } catch (error: any) {
+      res.status(400).json({
+        success: false,
+        message: error.message || 'Failed to change password',
       });
     }
   }
@@ -303,4 +358,3 @@ export class AuthController {
     }
   }
 }
-

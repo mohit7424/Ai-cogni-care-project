@@ -10,6 +10,7 @@ import type {
   ResendOtpDTO,
   ForgotPasswordDTO,
   ResetPasswordDTO,
+  ChangePasswordDTO,
   UserRole,
   UserDTO,
   AuthUserPayload,
@@ -38,6 +39,17 @@ export class AuthService {
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     };
+  }
+
+  /**
+   * Normalize OTP purpose string across frontend variants
+   */
+  private static normalizePurpose(purpose?: string): 'email_verification' | 'password_reset' | 'login_2fa' {
+    if (!purpose) return 'email_verification';
+    const p = purpose.toLowerCase().replace(/[-_]/g, '');
+    if (p.includes('reset') || p.includes('password')) return 'password_reset';
+    if (p.includes('login') || p.includes('2fa')) return 'login_2fa';
+    return 'email_verification';
   }
 
   /**
@@ -86,7 +98,8 @@ export class AuthService {
   // ================= REGISTER =================
 
   static async register(dto: RegisterDTO) {
-    const existingUser = await AuthRepository.findUserByEmail(dto.email);
+    const email = (dto.email || (dto as any).identifier)?.toLowerCase().trim();
+    const existingUser = await AuthRepository.findUserByEmail(email);
 
     if (existingUser && existingUser.isEmailVerified) {
       throw new Error('Email is already registered. Please log in.');
@@ -106,7 +119,7 @@ export class AuthService {
       user = updated || existingUser;
     } else {
       user = await AuthRepository.createUser({
-        email: dto.email,
+        email,
         passwordHash,
         firstName: dto.firstName,
         lastName: dto.lastName,
@@ -134,14 +147,18 @@ export class AuthService {
       userId: user.id,
       email: user.email,
       requiresVerification: true,
+      message: 'Account created successfully. Verification code sent.',
     };
   }
 
   // ================= VERIFY OTP =================
 
   static async verifyOtp(dto: VerifyOtpDTO) {
-    const purpose = dto.purpose || 'email_verification';
-    const otpRecord = await AuthRepository.findValidOtp(dto.email, dto.otp, purpose);
+    const email = (dto.email || (dto as any).identifier)?.toLowerCase().trim();
+    const otpCode = dto.otp || (dto as any).token;
+    const purpose = this.normalizePurpose(dto.purpose);
+
+    const otpRecord = await AuthRepository.findValidOtp(email, otpCode, purpose);
 
     if (!otpRecord) {
       throw new Error('Invalid or expired verification code');
@@ -150,7 +167,7 @@ export class AuthService {
     await AuthRepository.markOtpUsed(otpRecord.id);
 
     if (purpose === 'email_verification') {
-      const user = await AuthRepository.findUserByEmail(dto.email);
+      const user = await AuthRepository.findUserByEmail(email || otpRecord.email);
       if (!user) throw new Error('User not found');
 
       const verifiedUser = (await AuthRepository.markUserEmailVerified(user.id)) || user;
@@ -169,7 +186,7 @@ export class AuthService {
 
     return {
       verified: true,
-      token: dto.otp,
+      token: otpCode,
       message: 'Code verified successfully',
     };
   }
@@ -177,27 +194,29 @@ export class AuthService {
   // ================= RESEND OTP =================
 
   static async resendOtp(dto: ResendOtpDTO) {
-    const purpose = dto.purpose || 'email_verification';
-    const user = await AuthRepository.findUserByEmail(dto.email);
+    const email = (dto.email || (dto as any).identifier)?.toLowerCase().trim();
+    const purpose = this.normalizePurpose(dto.purpose);
+
+    const user = await AuthRepository.findUserByEmail(email);
 
     if (!user && purpose === 'email_verification') {
       throw new Error('No registration found for this email');
     }
 
-    await AuthRepository.invalidatePreviousOtps(dto.email, purpose);
+    await AuthRepository.invalidatePreviousOtps(email, purpose);
 
     const otp = this.generateOtpCode();
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
     await AuthRepository.createOtp({
       userId: user ? user.id : undefined,
-      email: dto.email,
+      email,
       otpCode: otp,
       purpose,
       expiresAt,
     });
 
-    await EmailService.sendOtpEmail(dto.email, otp, purpose);
+    await EmailService.sendOtpEmail(email, otp, purpose);
 
     return {
       message: 'Verification code sent successfully',
@@ -208,7 +227,8 @@ export class AuthService {
   // ================= LOGIN =================
 
   static async login(dto: LoginDTO) {
-    const user = await AuthRepository.findUserByEmail(dto.email);
+    const email = (dto.email || (dto as any).identifier)?.toLowerCase().trim();
+    const user = await AuthRepository.findUserByEmail(email);
     if (!user || !user.passwordHash) {
       throw new Error('Invalid email or password');
     }
@@ -301,7 +321,8 @@ export class AuthService {
   // ================= FORGOT PASSWORD =================
 
   static async forgotPassword(dto: ForgotPasswordDTO) {
-    const user = await AuthRepository.findUserByEmail(dto.email);
+    const email = (dto.email || (dto as any).identifier)?.toLowerCase().trim();
+    const user = await AuthRepository.findUserByEmail(email);
 
     if (user) {
       await AuthRepository.invalidatePreviousOtps(user.email, 'password_reset');
@@ -338,13 +359,13 @@ export class AuthService {
   // ================= RESET PASSWORD =================
 
   static async resetPassword(dto: ResetPasswordDTO) {
-    const otpCode = dto.token;
+    const otpCode = dto.token || (dto as any).otp;
     const password = dto.newPassword || (dto as any).password;
     if (!password) {
       throw new Error('New password is required');
     }
 
-    const email = (dto as any).email;
+    const email = (dto as any).email || (dto as any).identifier;
     const otpRecord = await AuthRepository.findValidOtp(email, otpCode, 'password_reset');
 
     if (!otpRecord) {
@@ -356,6 +377,14 @@ export class AuthService {
       throw new Error('User account not found');
     }
 
+    // Check if new password is same as the old password
+    if (user.passwordHash) {
+      const isSamePassword = await bcrypt.compare(password, user.passwordHash);
+      if (isSamePassword) {
+        throw new Error('New password cannot be the same as your old password. Please create a new password.');
+      }
+    }
+
     const passwordHash = await bcrypt.hash(password, 10);
     await AuthRepository.updateUserPassword(user.id, passwordHash);
     await AuthRepository.markOtpUsed(otpRecord.id);
@@ -363,6 +392,36 @@ export class AuthService {
 
     return {
       message: 'Password reset successful. Please log in with your new password.',
+    };
+  }
+
+  // ================= CHANGE PASSWORD =================
+
+  static async changePassword(userId: string, dto: ChangePasswordDTO) {
+    const user = await AuthRepository.findUserById(userId);
+    if (!user || !user.passwordHash) {
+      throw new Error('User not found');
+    }
+
+    if (!dto.currentPassword || !dto.newPassword) {
+      throw new Error('Both current and new password are required');
+    }
+
+    const isMatch = await bcrypt.compare(dto.currentPassword, user.passwordHash);
+    if (!isMatch) {
+      throw new Error('Incorrect current password');
+    }
+
+    if (dto.currentPassword === dto.newPassword) {
+      throw new Error('New password cannot be the same as your current password. Please create a new password.');
+    }
+
+    const newHash = await bcrypt.hash(dto.newPassword, 10);
+    await AuthRepository.updateUserPassword(user.id, newHash);
+    await AuthRepository.revokeAllUserTokens(user.id);
+
+    return {
+      message: 'Password changed successfully',
     };
   }
 

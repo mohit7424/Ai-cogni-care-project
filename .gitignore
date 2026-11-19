@@ -1,0 +1,30 @@
+# ========================================
+# CogniCare Workspace Root — .gitignore
+# ========================================
+
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Secrets & Environment Variables (NEVER COMMIT)
+.env
+.env.*
+*.env
+*.env.local
+
+# Build Outputs
+dist/
+build/
+out/
+.next/
+
+# Logs
+logs/
+*.log
+
+# OS & Editor Files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
