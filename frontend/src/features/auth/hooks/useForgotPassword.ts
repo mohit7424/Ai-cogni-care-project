@@ -55,7 +55,7 @@ export function useForgotPassword(): UseForgotPasswordReturn {
       setIsSubmitted(true);
     } catch (err) {
       const message =
-        (err as { message?: string })?.message ?? 'Failed to send reset link. Please try again.';
+        (err as { message?: string })?.message ?? 'Failed to send verification code. Please try again.';
       setErrors({ general: message });
       setStatus('error');
     }
