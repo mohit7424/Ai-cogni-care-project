@@ -16,19 +16,18 @@ export interface ChangePasswordRequest {
 }
 
 /**
- * Initiates the password reset flow by sending a reset link to the user's email.
- * TODO: Integrate with real backend endpoint POST /auth/forgot-password
+ * Initiates the password reset flow by sending a 6-digit OTP code to the user's email.
+ * Real backend endpoint: POST /auth/forgot-password
  */
 export async function forgotPassword(
   data: ForgotPasswordRequest
 ): Promise<ApiResponse<{ message: string }>> {
-  // TODO: Replace stub with real API call
   return authService.post<{ message: string }>('/auth/forgot-password', data);
 }
 
 /**
- * Resets the user's password using the token from the email link.
- * TODO: Integrate with real backend endpoint POST /auth/reset-password
+ * Resets the user's password using the 6-digit OTP code.
+ * Real backend endpoint: POST /auth/reset-password
  */
 export async function resetPassword(
   data: ResetPasswordRequest

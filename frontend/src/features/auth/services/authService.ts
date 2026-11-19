@@ -58,7 +58,7 @@ function getDevFallbackData<T>(endpoint: string, body?: unknown): T {
 
   if (endpoint.includes('/forgot-password') || endpoint.includes('/reset-password')) {
     return {
-      message: 'Password reset link sent (Offline Dev Mode)',
+      message: 'Password reset code sent (Offline Dev Mode)',
     } as T;
   }
 
@@ -70,7 +70,7 @@ function getDevFallbackData<T>(endpoint: string, body?: unknown): T {
     } as T;
   }
 
-  if (endpoint.includes('/otp/send')) {
+  if (endpoint.includes('/otp/send') || endpoint.includes('/otp/resend')) {
     return {
       message: 'OTP code sent (Offline Dev Mode)',
       expiresIn: 60,
@@ -98,6 +98,7 @@ async function request<T>(
   const config: RequestInit = {
     method,
     headers: requestHeaders,
+    credentials: 'include', // Include HttpOnly cookies across origins
   };
 
   if (body !== undefined) {
@@ -123,9 +124,14 @@ async function request<T>(
 
     const data: ApiResponse<T> = (await response.json()) as ApiResponse<T>;
     return data;
-  } catch {
-    // If backend server is not running (e.g. ECONNREFUSED, TypeError: Failed to fetch)
-    // Fallback to offline mock data so Next.js UI doesn't crash
+  } catch (err: unknown) {
+    // If it's a real HTTP error from the server (e.g. 400 Bad Request, 401 Unauthorized), rethrow it!
+    const errorObj = err as { statusCode?: number; code?: string; message?: string } | null;
+    if (errorObj && (errorObj.statusCode || errorObj.code || (errorObj.message && !errorObj.message.includes('fetch')))) {
+      throw err;
+    }
+
+    // Only if backend server is unreachable (network error / offline)
     console.warn(
       `[CogniCare Auth] Backend at ${API_BASE_URL} is unreachable. Using offline mock fallback for endpoint: ${endpoint}`
     );
