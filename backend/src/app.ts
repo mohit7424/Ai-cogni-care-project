@@ -5,15 +5,16 @@ import cookieParser from 'cookie-parser';
 import apiRoutes from './routes/index.js';
 
 const app = express();
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  'https://frontend-sage-seven-18.vercel.app',
+  'http://localhost:3000',
+].filter((origin): origin is string => Boolean(origin));
 
 // Middleware setup
 app.use(
   cors({
-    origin:
-      process.env.FRONTEND_URL ||
-      (process.env.NODE_ENV === 'production'
-        ? 'https://frontend-sage-seven-18.vercel.app'
-        : 'http://localhost:3000'),
+    origin: allowedOrigins,
     credentials: true,
   })
 );
