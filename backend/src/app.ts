@@ -9,7 +9,11 @@ const app = express();
 // Middleware setup
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin:
+      process.env.FRONTEND_URL ||
+      (process.env.NODE_ENV === 'production'
+        ? 'https://frontend-sage-seven-18.vercel.app'
+        : 'http://localhost:3000'),
     credentials: true,
   })
 );

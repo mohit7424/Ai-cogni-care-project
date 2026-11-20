@@ -39,7 +39,11 @@ export async function googleCallback(
  */
 export function initiateGoogleSignIn(): void {
   // TODO: Replace with real Google OAuth redirect URL from backend
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
+  const baseUrl =
+    process.env.NEXT_PUBLIC_API_URL ??
+    (process.env.NODE_ENV === 'production'
+      ? 'https://ai-cogni-care-project.onrender.com/api/v1'
+      : 'http://localhost:8000/api/v1');
   const googleAuthUrl = new URL('/auth/google', baseUrl).toString();
   window.location.assign(googleAuthUrl);
 }
