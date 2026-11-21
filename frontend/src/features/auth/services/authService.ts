@@ -135,6 +135,10 @@ async function request<T>(
       throw err;
     }
 
+    if (process.env.NODE_ENV === 'production') {
+      throw err;
+    }
+
     // Only if backend server is unreachable (network error / offline)
     console.warn(
       `[CogniCare Auth] Backend at ${API_BASE_URL} is unreachable. Using offline mock fallback for endpoint: ${endpoint}`

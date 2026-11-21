@@ -5,7 +5,7 @@ import app from './app.js';
 
 const PORT = Number(process.env.PORT) || 8000;
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`===============================================`);
   console.log(`🚀 CogniCare Backend Server running on:`);
   console.log(`👉 http://localhost:${PORT}/api/v1`);

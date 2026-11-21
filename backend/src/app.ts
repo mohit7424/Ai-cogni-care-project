@@ -6,7 +6,7 @@ import apiRoutes from './routes/index.js';
 
 const app = express();
 const allowedOrigins = [
-  process.env.FRONTEND_URL,
+  ...(process.env.FRONTEND_URL?.split(',').map((origin) => origin.trim()) ?? []),
   'https://frontend-sage-seven-18.vercel.app',
   'http://localhost:3000',
 ].filter((origin): origin is string => Boolean(origin));
@@ -14,7 +14,14 @@ const allowedOrigins = [
 // Middleware setup
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error(`Origin ${origin} is not allowed by CORS`));
+    },
     credentials: true,
   })
 );
