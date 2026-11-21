@@ -10,17 +10,28 @@ const allowedOrigins = [
   'https://frontend-sage-seven-18.vercel.app',
   'http://localhost:3000',
 ].filter((origin): origin is string => Boolean(origin));
-
+.
 // Middleware setup
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
+      // Allow requests with no origin (like mobile apps, curl, or server-to-server)
+      if (!origin) {
         callback(null, true);
         return;
       }
 
-      callback(new Error(`Origin ${origin} is not allowed by CORS`));
+      const isAllowed =
+        allowedOrigins.includes(origin) ||
+        origin.endsWith('.vercel.app') ||
+        origin.includes('localhost') ||
+        origin.includes('127.0.0.1');
+
+      if (isAllowed) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Origin ${origin} is not allowed by CORS`));
+      }
     },
     credentials: true,
   })
